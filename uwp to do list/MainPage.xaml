@@ -1,0 +1,41 @@
+﻿<Page
+    x:Class="uwp_to_do_list.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:uwp_to_do_list"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:fa="using:FontAwesome.UWP"
+    mc:Ignorable="d"
+    Background="#08090A"       
+    >
+
+    <Grid>
+        
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <StackPanel Background="#04000E" Width="240"  Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" >
+            
+            <TextBlock Text="Hoy" Foreground="White" FontSize="24" HorizontalAlignment="Center" Margin="0,50,0,0"></TextBlock>
+            <fa:FontAwesome Icon="CalendarCheckOutline" Height="40" Width="40" FontSize="40" Foreground="Fuchsia" HorizontalAlignment="Left" Margin="20,-35,0,0"></fa:FontAwesome>
+            <TextBlock Text="Mañana" Foreground="White" FontSize="24" HorizontalAlignment="Center" Margin="0,20,0,0"></TextBlock>
+            <fa:FontAwesome Icon="CalendarOutline" Height="40" Width="40" FontSize="40" Foreground="Fuchsia" HorizontalAlignment="Left" Margin="20,-35,0,0"></fa:FontAwesome>
+            <TextBlock Text="planeado" Foreground="White" FontSize="24" HorizontalAlignment="Center" Margin="0,20,0,0"></TextBlock>
+            <fa:FontAwesome Icon="Calendar" Height="40" Width="40" FontSize="40" Foreground="Fuchsia" HorizontalAlignment="Left" Margin="20,-35,0,0"></fa:FontAwesome> 
+            <TextBlock Text="tareas" Foreground="White" FontSize="24" HorizontalAlignment="Center" Margin="0,20,0,0"></TextBlock>
+            <fa:FontAwesome Icon="Home" Height="40" Width="40" FontSize="40" Foreground="Fuchsia" HorizontalAlignment="Left" Margin="20,-35,0,0"></fa:FontAwesome>
+                             
+        </StackPanel>
+        
+        <TextBox Grid.Row="1" HorizontalAlignment="Left" Grid.Column="0" Text="+ agrega una lista" Background="#04000E" Foreground="White" Height="50" Width="240" ></TextBox>
+        <TextBox Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center"    VerticalAlignment="Center" Text="+ agrega una tarea" Background="#04000E" Foreground="White" Height="40" Width="1000" Margin="20,0,-20,0" />
+    </Grid>
+</Page>
