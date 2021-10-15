@@ -28,12 +28,7 @@ namespace uwp_to_do_list
         public MainPage()
         {
             this.InitializeComponent();
-            SqlConnection conexionsql;
-
-#pragma warning disable CS0103 // El nombre 'ConfigurationManager' no existe en el contexto actual
-            
-#pragma warning restore CS0103 // El nombre 'ConfigurationManager' no existe en el contexto actual
-           
+ 
 
         }
 
