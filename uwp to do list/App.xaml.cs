@@ -33,6 +33,8 @@ namespace uwp_to_do_list
             this.Suspending += OnSuspending;
         }
 
+        
+
         /// <summary>
         /// Se invoca cuando la aplicación la inicia normalmente el usuario final. Se usarán otros puntos
         /// de entrada cuando la aplicación se inicie para abrir un archivo específico, por ejemplo.
