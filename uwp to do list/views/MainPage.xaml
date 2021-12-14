@@ -22,31 +22,22 @@
         </Grid.RowDefinitions>
         <StackPanel Background="#04000E" Width="240"  Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" >
 
-            <TextBlock Text="Hoy" Foreground="White" FontSize="24" HorizontalAlignment="Center" Margin="0,50,0,0"></TextBlock>
+            <TextBlock Text="today" Foreground="White" FontSize="24" HorizontalAlignment="Center" Margin="0,50,0,0"></TextBlock>
             <fa:FontAwesome Icon="CalendarCheckOutline" Height="40" Width="40" FontSize="40" Foreground="Fuchsia" HorizontalAlignment="Left" Margin="20,-35,0,0"></fa:FontAwesome>
-            <TextBlock Text="Mañana" Foreground="White" FontSize="24" HorizontalAlignment="Center" Margin="0,20,0,0"></TextBlock>
+            <TextBlock Text="Tomorrow" Foreground="White" FontSize="24" HorizontalAlignment="Center" Margin="0,20,0,0"></TextBlock>
             <fa:FontAwesome Icon="CalendarOutline" Height="40" Width="40" FontSize="40" Foreground="Fuchsia" HorizontalAlignment="Left" Margin="20,-35,0,0"></fa:FontAwesome>
-            <TextBlock Text="planeado" Foreground="White" FontSize="24" HorizontalAlignment="Center" Margin="0,20,0,0"></TextBlock>
+            <TextBlock Text="planning" Foreground="White" FontSize="24" HorizontalAlignment="Center" Margin="0,20,0,0"></TextBlock>
             <fa:FontAwesome Icon="Calendar" Height="40" Width="40" FontSize="40" Foreground="Fuchsia" HorizontalAlignment="Left" Margin="20,-35,0,0"></fa:FontAwesome>
-            <TextBlock Text="tareas" Foreground="White" FontSize="24" HorizontalAlignment="Center" Margin="0,20,0,0"></TextBlock>
+            <TextBlock Text="tasks" Foreground="White" FontSize="24" HorizontalAlignment="Center" Margin="0,20,0,0"></TextBlock>
             <fa:FontAwesome Icon="Home" Height="40" Width="40" FontSize="40" Foreground="Fuchsia" HorizontalAlignment="Left" Margin="20,-35,0,0"></fa:FontAwesome>
 
         </StackPanel>
 
-        <TextBox Grid.Row="1" HorizontalAlignment="Left" Grid.Column="0" Text="+ agrega una lista" Background="#04000E" Foreground="White" Height="50" Width="240" ></TextBox>
-        <TextBox x:Name="add_Task_textbox" Grid.Row="1" Grid.Column="1"   HorizontalAlignment="Center"    VerticalAlignment="Center" Text="+ agrega una tarea" Background="#04000E" Foreground="White" Height="40" Width="1000" Margin="20,0,-20,0" />
+        <TextBox Grid.Row="1" HorizontalAlignment="Left" Grid.Column="0" Text="+ add a list " Background="#04000E" Foreground="White" Height="50" Width="240" ></TextBox>
+        <TextBox x:Name="add_Task_textbox" Grid.Row="1" Grid.Column="1"   HorizontalAlignment="Center"    VerticalAlignment="Center" Text="+ add a task"  Background="#04000E" Foreground="White" Height="40" Width="1000" Margin="20,0,-20,0" />
 
-        <ListView  ItemsSource="{x:Bind _Task}" x:Name="task_list" Grid.Row="0" Grid.Column="1" Background="Transparent" >
-            
-            <ListView.ItemTemplate>
-                
-                <DataTemplate x:DataType="local:Task"  >
-                    <TextBlock  Text="{x:Bind Name_task }"></TextBlock>
-
-                </DataTemplate>
-
-            </ListView.ItemTemplate>
-
+        <ListView   x:Name="task_list" Grid.Row="0" Grid.Column="1" Background="Transparent" >
+    
         </ListView>
         <TextBlock x:Name="d" Foreground="White"  Grid.Column="1" HorizontalAlignment="Left" Margin="810,61,0,0" Text="" VerticalAlignment="Top" Height="95" Width="280"/>
     </Grid>

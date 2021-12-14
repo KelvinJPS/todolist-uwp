@@ -32,25 +32,21 @@ namespace uwp_to_do_list
     /// resolver que 
     public sealed partial class MainPage : Page
     {
-        string ConnectionString = @"Data Source = DESKTOP-CQ3BHUS; Initial Catalog=todolist;Integrated Security=True";
-        Task _Task;
+      
         private ObservableCollection<Task> tasks_;
         public ObservableCollection<Task> Tasks
-      
-     {
+
+        {
             get
-            { return tasks_;  }
+            { return tasks_; }
 
             set { tasks_ = value; }
-          
-     }
+
+        }
 
         public MainPage()
         {
             this.InitializeComponent();
-            task_list.ItemsSource = GetTask(ConnectionString);
-            tasks_ = GetTask(ConnectionString);
-            this.DataContext = Tasks;
 
         }
 
@@ -69,7 +65,7 @@ namespace uwp_to_do_list
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
             }
         }
-   
+
 
         public static ObservableCollection<Task> GetTask(string connectionString)
         {
@@ -90,11 +86,9 @@ namespace uwp_to_do_list
                             cmd.CommandText = GetTask_query;
                             using (SqlDataReader reader = cmd.ExecuteReader())
                             {
-                             
+
                                 while (reader.Read())
                                 {
-                                    
-                                    
                                     try
                                     {
 
@@ -106,30 +100,23 @@ namespace uwp_to_do_list
                                         task.priority = reader.GetString(6);
                                         tasks.Add(task);
                                     }
-                                   catch (Exception e)
-                                    { Debug.Print(e.Message);}
+                                    catch (Exception e)
+                                    { Debug.Print(e.Message); }
                                 }
                             }
                         }
-                    
-                        }
-                          
+
                     }
+
+                }
                 return tasks;
             }
             catch (Exception esql)
             {
                 Debug.Print("Exception: " + esql.Message);
             }
-            return null; 
-          
+            return null;
+
         }
-            }
-            }
-        
-    
- 
-
-
-
-
+    }
+}
