@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;  
 
-public class Task : INotifyPropertyChanged
+public abstract class Task : INotifyPropertyChanged
 {
     public string Name_task { get; set; }
     public DateTime Reminder { get; set; }
