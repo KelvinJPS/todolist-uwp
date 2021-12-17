@@ -36,10 +36,8 @@ namespace uwp_to_do_list
                       taskTodo.NameTask = add_Task_textbox.Text;
                       taskTodo.AddTask(taskTodo.NameTask);
                       Tasks.Add(taskTodo);
-                      add_Task_textbox.Text = String.Empty;
                       add_Task_textbox.Focus(Windows.UI.Xaml.FocusState.Keyboard);
-                     
-
+                    
                     }
                    catch (Exception ex)
                     {
@@ -48,10 +46,6 @@ namespace uwp_to_do_list
 
                 }
             }
-
-        private void add_Task_textbox_GotFocus(object sender, Windows.UI.Xaml.RoutedEventArgs e) => add_Task_textbox.Text = String.Empty;
-
-        private void add_Task_textbox_LosingFocus(Windows.UI.Xaml.UIElement sender, Windows.UI.Xaml.Input.LosingFocusEventArgs args) => add_Task_textbox.Text = "add task";
        
     }
 
