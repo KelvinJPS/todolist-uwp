@@ -34,7 +34,7 @@
         </StackPanel>
 
         <TextBox  Grid.Row="1" HorizontalAlignment="Left" Grid.Column="0" Text="+ add a list " Background="#04000E" Foreground="White" Height="50" Width="240" ></TextBox>
-        <TextBox x:Name="add_Task_textbox" Grid.Row="1" Grid.Column="1" KeyDown="add_Task_textbox_KeyDown"  HorizontalAlignment="Center"    VerticalAlignment="Center" Text="+ add a task"  Background="#04000E" Foreground="White" Height="40" Width="1000" Margin="20,0,-20,0" />
+        <TextBox x:Name="add_Task_textbox" Grid.Row="1" Grid.Column="1" KeyDown="add_Task_textbox_KeyDown" GotFocus="add_Task_textbox_GotFocus" LosingFocus="add_Task_textbox_LosingFocus"  HorizontalAlignment="Center"    VerticalAlignment="Center" Text="+ add a task"  Background="#04000E" Foreground="White" Height="40" Width="1000" Margin="20,0,-20,0" />
 
         <ListView x:Name="task_list" Grid.Row="0" Grid.Column="1" 
           Background="Transparent">
