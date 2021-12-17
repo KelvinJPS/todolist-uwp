@@ -1,10 +1,10 @@
 ﻿<Page
-    x:Class="uwp_to_do_list.views.MainView"
+    x:Class="uwp_to_do_list.MainView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:uwp_to_do_list.views"
+    xmlns:local="using:uwp_to_do_list"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:fa="using:FontAwesome.UWP" xmlns:local1="using:uwp_to_do_list.view_model"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:fa="using:FontAwesome.UWP"
     mc:Ignorable="d"
    Background="#08090A"       
     >
@@ -33,16 +33,18 @@
 
         </StackPanel>
 
-        <TextBox Grid.Row="1" HorizontalAlignment="Left" Grid.Column="0" Text="+ add a list " Background="#04000E" Foreground="White" Height="50" Width="240" ></TextBox>
-        <TextBox x:Name="add_Task_textbox" Grid.Row="1" Grid.Column="1"   HorizontalAlignment="Center"    VerticalAlignment="Center" Text="+ add a task"  Background="#04000E" Foreground="White" Height="40" Width="1000" Margin="20,0,-20,0" />
+        <TextBox  Grid.Row="1" HorizontalAlignment="Left" Grid.Column="0" Text="+ add a list " Background="#04000E" Foreground="White" Height="50" Width="240" ></TextBox>
+        <TextBox x:Name="add_Task_textbox" Grid.Row="1" Grid.Column="1" KeyDown="add_Task_textbox_KeyDown"  HorizontalAlignment="Center"    VerticalAlignment="Center" Text="+ add a task"  Background="#04000E" Foreground="White" Height="40" Width="1000" Margin="20,0,-20,0" />
 
         <ListView x:Name="task_list" Grid.Row="0" Grid.Column="1" Background="Transparent">
-            <ListView.ItemTemplate>
-                <DataTemplate x:DataType="local1:Task_Todo">
-                    <TextBlock Text="{x:Bind Name_Task}" Foreground="White" Width="100" Height="100" ></TextBlock>
-                </DataTemplate>
-            </ListView.ItemTemplate>
 
+            <ListViewItem>
+
+                <DataTemplate x:DataType="local:TaskTodo">
+                    <TextBlock Width="100" Foreground="White" Text="{x:Bind NameTask}"></TextBlock>
+                </DataTemplate>
+                
+            </ListViewItem>
    
        
         </ListView>
