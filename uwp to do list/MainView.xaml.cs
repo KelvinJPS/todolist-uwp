@@ -13,12 +13,14 @@ namespace uwp_to_do_list
 
     public sealed partial class MainView : Page 
     {
+        ObservableCollection<TaskTodo> Tasks = new ObservableCollection<TaskTodo>();
         public MainView()
         {
             this.InitializeComponent();
-            TaskTodo taskTodo = new TaskTodo();
-            task_list.ItemsSource = taskTodo.GetTasks();
-         
+            TaskTodo taskTodo = new TaskTodo();          
+            Tasks = taskTodo.GetTasks();
+            task_list.ItemsSource = Tasks;
+           
 
         }
       
@@ -31,12 +33,15 @@ namespace uwp_to_do_list
                     {
                         taskTodo.NameTask = add_Task_textbox.Text;
                         taskTodo.AddTask(taskTodo.NameTask);
+                        Tasks.Add(taskTodo);
 
                     }
                     catch (Exception ex)
                     {
                         Debug.WriteLine(ex.ToString());
                     }
+
+
                 }
             }
           

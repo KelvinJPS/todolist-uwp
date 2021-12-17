@@ -21,6 +21,7 @@ namespace uwp_to_do_list
                     "EXISTS Task (Primary_Key INTEGER PRIMARY KEY, " +
                     "Name_task NVARCHAR(50) NULL)";
 
+     
                 SqliteCommand createTable = new SqliteCommand(tableCommand, db);
 
                 createTable.ExecuteReader();
