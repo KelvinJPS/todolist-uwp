@@ -24,27 +24,22 @@
  
         </Grid.RowDefinitions>
         <StackPanel Background="#04000E" Width="240"  Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" >
-            <ListView>
-
-                <TextBlock Text="today" Foreground="White" FontSize="24" HorizontalAlignment="Center" Margin="0,50,0,0"></TextBlock>
-                <fa:FontAwesome Icon="CalendarCheckOutline" Height="40" Width="40" FontSize="40" Foreground="Fuchsia" HorizontalAlignment="Left" Margin="20,-35,0,0"></fa:FontAwesome>
-                <TextBlock Text="Tomorrow" Foreground="White" FontSize="24" HorizontalAlignment="Center" Margin="0,20,0,0"></TextBlock>
-                <fa:FontAwesome Icon="CalendarOutline" Height="40" Width="40" FontSize="40" Foreground="Fuchsia" HorizontalAlignment="Left" Margin="20,-35,0,0"></fa:FontAwesome>
-                <TextBlock Text="planning" Foreground="White" FontSize="24" HorizontalAlignment="Center" Margin="0,20,0,0"></TextBlock>
-                <fa:FontAwesome Icon="Calendar" Height="40" Width="40" FontSize="40" Foreground="Fuchsia" HorizontalAlignment="Left" Margin="20,-35,0,0"></fa:FontAwesome>
-                <TextBlock Text="tasks" Foreground="White" FontSize="24" HorizontalAlignment="Center" Margin="0,20,0,0"></TextBlock>
-                <fa:FontAwesome Icon="Home" Height="40" Width="40" FontSize="40" Foreground="Fuchsia" HorizontalAlignment="Left" Margin="20,-35,0,0"></fa:FontAwesome>
-
-            </ListView>
-            
+        
+            <TextBlock Text="today" Foreground="White" FontSize="24" HorizontalAlignment="Center" Margin="0,50,0,0"></TextBlock>
+            <fa:FontAwesome Icon="CalendarCheckOutline" Height="40" Width="40" FontSize="40" Foreground="Fuchsia" HorizontalAlignment="Left" Margin="20,-35,0,0"></fa:FontAwesome>
+            <TextBlock Text="Tomorrow" Foreground="White" FontSize="24" HorizontalAlignment="Center" Margin="0,20,0,0"></TextBlock>
+            <fa:FontAwesome Icon="CalendarOutline" Height="40" Width="40" FontSize="40" Foreground="Fuchsia" HorizontalAlignment="Left" Margin="20,-35,0,0"></fa:FontAwesome>
+            <TextBlock Text="planning" Foreground="White" FontSize="24" HorizontalAlignment="Center" Margin="0,20,0,0"></TextBlock>
+            <fa:FontAwesome Icon="Calendar" Height="40" Width="40" FontSize="40" Foreground="Fuchsia" HorizontalAlignment="Left" Margin="20,-35,0,0"></fa:FontAwesome>
+            <TextBlock Text="tasks" Foreground="White" FontSize="24" HorizontalAlignment="Center" Margin="0,20,0,0"></TextBlock>
+            <fa:FontAwesome Icon="Home" Height="40" Width="40" FontSize="40" Foreground="Fuchsia" HorizontalAlignment="Left" Margin="20,-35,0,0"></fa:FontAwesome>
 
         </StackPanel>
 
         <TextBox  Grid.Row="1" HorizontalAlignment="Left" Grid.Column="0" PlaceholderText="+ add a list " Background="#04000E" Foreground="White" Height="50" Width="240" ></TextBox>
-        <TextBox x:Name="add_Task_textbox" Grid.Row="1" Grid.Column="1" KeyDown="add_Task_textbox_KeyDown" HorizontalAlignment="Center"  VerticalAlignment="Center" PlaceholderText="+ add a task"  Background="#04000E" Foreground="White" Height="40" Width="1000" />
+        <TextBox x:Name="add_Task_textbox" Grid.Row="1" Grid.Column="1" KeyDown="add_Task_textbox_KeyDown" LostFocus="add_Task_textbox_LostFocus"  HorizontalAlignment="Center"  VerticalAlignment="Center" PlaceholderText="+ add a task"  Background="#04000E" Foreground="White" Height="40" Width="1000" />
 
-        <ListView x:Name="task_list" Grid.Row="0" Grid.Column="1" 
-          Background="Transparent">
+        <ListView x:Name="task_list" Grid.Row="0" Grid.Column="1" SelectionChanged="task_list_SelectionChanged" Background="Transparent">
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="local:TaskTodo">
                     <TextBlock Width="100" Foreground="White" Text="{x:Bind NameTask}" />
@@ -52,33 +47,94 @@
             </ListView.ItemTemplate>
         </ListView>
 
-        <StackPanel Grid.Column="2" Width="340" Background="#04000E" HorizontalAlignment="Right">
-            <TextBlock Text="Name task" HorizontalAlignment="Center" FontSize="18"></TextBlock>
-            <TextBlock Text="X" HorizontalAlignment="Right" ></TextBlock>
+        <StackPanel Name="TaskForm" Grid.Column="2" Width="340" Background="#04000E" HorizontalAlignment="Right" Visibility="Collapsed" >
+            <Button FontSize="20" Name="quit_TaskForm" Content="x" Click="quit_TaskForm_Click" HorizontalAlignment="Right" Background="Transparent"></Button>
+            <TextBlock Name="NameTask_form" HorizontalAlignment="Center"  FontSize="20"></TextBlock>
 
-            <ListView>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto"></ColumnDefinition>
-                        <ColumnDefinition Width="auto"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
+            <Popup Name="calendar_popup"  IsOpen="False">
+                <StackPanel BorderBrush="#08090A">
 
-                    <fa:FontAwesome Grid.Column="0" Icon="Calendar" FontSize="20" Foreground="Fuchsia" ></fa:FontAwesome>
-                    <TextBlock Grid.Column="1"  Text=" Due Date" FontSize="20"></TextBlock>
+                    <CalendarView Name="calendar_date" CalendarItemBackground="#151513"></CalendarView>
 
-                </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
 
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto"></ColumnDefinition>
-                        <ColumnDefinition Width="auto"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"></ColumnDefinition>
+                            <ColumnDefinition Width="auto"></ColumnDefinition>
 
-                    <fa:FontAwesome Grid.Column="0" Grid.Row="0" Icon="ClockOutline" FontSize="20" Foreground="Fuchsia" ></fa:FontAwesome>
-                    <TextBlock Grid.Column="1"  Text=" Reminder" FontSize="20"></TextBlock>
+                        </Grid.ColumnDefinitions>
 
-                </Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"></RowDefinition>
+                            <RowDefinition Height="auto"></RowDefinition>
+                        </Grid.RowDefinitions>
 
+                        <Button Content="save" Click="save_Click" Grid.Column="0" Background="#1EAE70" Width="150"></Button>
+                        <Button Name="cancel_button" Content="cancel" Grid.Column="1" Background="#08090A" Width="150" Click="cancel_Click"></Button>
+                    </Grid>
+
+                </StackPanel>
+
+            </Popup>
+
+            <Popup Name="reminder_popup"  IsOpen="False">
+                <StackPanel BorderBrush="#08090A">
+
+                    <CalendarView  CalendarItemBackground="#151513"></CalendarView>
+
+                    <TimePicker Name="reminder_time_picker" Width="295" Background="#151513"></TimePicker>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+
+                            <ColumnDefinition Width="auto"></ColumnDefinition>
+                            <ColumnDefinition Width="auto"></ColumnDefinition>
+
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"></RowDefinition>
+                            <RowDefinition Height="auto"></RowDefinition>
+                        </Grid.RowDefinitions>
+
+                        <Button Name="reminder_save" Click="reminder_save_Click" Content="save"  Grid.Column="0" Grid.Row="1" Background="#1EAE70" Width="148"></Button>
+                        <Button  Name="reminder_cancel" Click="reminder_cancel_Click" Content="cancel" Grid.Column="1" Grid.Row="1" Background="#08090A" Width="148" ></Button>
+                    </Grid>
+
+                </StackPanel>
+
+            </Popup>
+
+
+            <ListView Name="listView_FormData" >
+                
+                
+                <Button Name="Calendar_Button" Click="calendar_button"  Background="Transparent">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"></ColumnDefinition>
+                                <ColumnDefinition Width="auto"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+
+                            <fa:FontAwesome Grid.Column="0" Icon="Calendar" FontSize="20" Foreground="Fuchsia" ></fa:FontAwesome>
+                            <TextBlock Grid.Column="1" Text=" Due Date" FontSize="20"></TextBlock>
+
+                        </Grid>
+                    </Button>
+
+                <Button Name="reminder_button" Click="reminder_button_Click">
+
+                    <Grid>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"></ColumnDefinition>
+                            <ColumnDefinition Width="auto"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+
+                        <fa:FontAwesome Grid.Column="0" Grid.Row="0" Icon="ClockOutline" FontSize="20" Foreground="Fuchsia" ></fa:FontAwesome>
+                        <TextBlock Grid.Column="1"  Text=" Reminder" FontSize="20"></TextBlock>
+
+                    </Grid>
+                </Button>
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto"></ColumnDefinition>
@@ -116,9 +172,9 @@
                     <fa:FontAwesome Grid.Column="0" Grid.Row="0" Icon="Flag" FontSize="20" Foreground="Fuchsia" ></fa:FontAwesome>
                     <TextBlock Margin="0,0,10,0" Grid.Column="1" Text=" Priority"  FontSize="20"></TextBlock>
 
-                    <RadioButton  Grid.Column="2"></RadioButton>
-                    <RadioButton  Grid.Column="4"></RadioButton>
-                    <RadioButton  Grid.Column="6"></RadioButton>
+                    <RadioButton Name="low" Click="priority_checkbox_click" Grid.Column="2"></RadioButton>
+                    <RadioButton Name="medium" Click="priority_checkbox_click" Grid.Column="4"></RadioButton>
+                    <RadioButton Name="high"   Click="priority_checkbox_click" Grid.Column="6"></RadioButton>
 
                     <fa:FontAwesome Grid.Column="3" Margin="0,0,10,0"  Icon="Flag" FontSize="20" Foreground="Green"  ></fa:FontAwesome>
                     <fa:FontAwesome Grid.Column="5"  Margin="0,0,10,0" Icon="Flag" FontSize="20" Foreground="Yellow"></fa:FontAwesome>
@@ -138,17 +194,12 @@
 
                     <RadioButton Grid.Column="0"></RadioButton>
                     <TextBox  Width="250" Margin="-80,0,0,0" Background="Transparent" PlaceholderText="add subtask"  Grid.Column="1" Name="SubTask" ></TextBox>
-                    
+
                 </Grid>
 
-                <TextBox Margin="0,50,0,0"  PlaceholderText="Add a note" Width="300" TextWrapping="Wrap"></TextBox>
-                
-                
-                
+                <TextBox Margin="0,50,0,0" Name="descriptions_textbox" KeyDown="descriptions_textbox_KeyDown" PlaceholderText="Add a note" Width="300" TextWrapping="Wrap"></TextBox>
+
             </ListView>
-
-
-            
             
         </StackPanel>
        
