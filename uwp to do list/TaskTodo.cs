@@ -12,22 +12,23 @@ namespace uwp_to_do_list
     {
         public TaskTodo()
         {
+            
             NameTask = default;
-            Reminder = default;
+            Reminder = String.Empty;
             Date     = String.Empty;
             Priority = String.Empty;
             NameList = String.Empty;
-            description = String.Empty;
+            Description = String.Empty;
         }
 
         public int TaskId { get  ; set; }
         public string NameTask { get; set; }
-        public TimeSpan Reminder { get; set; }
+        public string Reminder { get; set; }
         public string NameList { get; set; }
         public string Date { get; set; }
         public string Priority { get; set; }
 
-        public string description { get; set; }
+        public string Description { get; set; }
          
         
 
@@ -35,7 +36,9 @@ namespace uwp_to_do_list
         private void NotifyPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            updateTask(TaskId, NameTask, Date, Reminder, Priority, NameList, Description);
         }
+
 
         public ObservableCollection<TaskTodo> GetTasks()
         {
@@ -58,11 +61,13 @@ namespace uwp_to_do_list
                     try
                     {
                         TaskTodo taskTodo = new TaskTodo();
-                        taskTodo.NameTask = query.GetString(1);
-                        taskTodo. Date     = query.GetString(2);
-                        taskTodo.Priority = query.GetString(4);
-                        taskTodo.NameList = query.GetString(5);
-                            
+                        taskTodo.TaskId   =  query.GetInt32(0);
+                        taskTodo.NameTask =  query.GetString(1);
+                        taskTodo.Date    =  query.GetString(2);
+                        taskTodo.Reminder =  query.GetString(3);
+                        taskTodo.Priority =  query.GetString(4);
+                        taskTodo.NameList =  query.GetString(5);
+                        taskTodo.Description = query.GetString(6);    
                         
                         Tasks.Add(taskTodo);
                     }
@@ -76,7 +81,6 @@ namespace uwp_to_do_list
                 db.Close();
             }
 
-
             return Tasks;
         }
 
@@ -85,16 +89,18 @@ namespace uwp_to_do_list
         {
             sqliteControler sqliteControler = new sqliteControler();
             sqliteControler.InitializeDatabase();
-            AddTask(task);
+            sqliteControler.AddData(task);
                                
         }
 
-        public void updateTask(TaskTodo task)
+        public void updateTask(int Id, string NameTask, string Date,string Reminder, string Priority, string NameList, string Description)
         {
 
             sqliteControler sqliteControler = new sqliteControler();
-            sqliteControler.UpdateData(task);
+            sqliteControler.UpdateData(TaskId, NameTask, Date, Reminder, Priority, NameList, Description);
         }
+
+       
         
     }
     

@@ -20,9 +20,9 @@ namespace uwp_to_do_list
 
                 String tableCommand = "CREATE TABLE IF NOT " +
                     "EXISTS Task (Primary_Key INTEGER PRIMARY KEY, " +
-                    "Name_task NVARCHAR(50) NULL,due_date date, reminder nvarchar(12), priority NVARCHAR(10), list NVARCHAR(50),description text)";
+                    "Name_task NVARCHAR(50) NULL,due_date date, reminder datetime, priority NVARCHAR(10), list NVARCHAR(50),description text)";
 
-                tableCommand = "alter table Task drop reminder";
+
                 SqliteCommand createTable = new SqliteCommand(tableCommand, db);
 
                 createTable.ExecuteReader();
@@ -45,10 +45,10 @@ namespace uwp_to_do_list
                 insertCommand.CommandText = "INSERT INTO Task VALUES (NULL, @NameTask,@DueDate,@Reminder,@Priority,@List,@description);";
                 insertCommand.Parameters.AddWithValue("@NameTask", Task.NameTask);
                 insertCommand.Parameters.AddWithValue("@DueDate", Task.Date);
-                insertCommand.Parameters.AddWithValue("@Reminder", Task.Reminder.ToString());
+                insertCommand.Parameters.AddWithValue("@Reminder", Task.Reminder);
                 insertCommand.Parameters.AddWithValue("@Priority", Task.Priority);
                 insertCommand.Parameters.AddWithValue("@List", Task.NameList);
-                insertCommand.Parameters.AddWithValue("@description", Task.description);
+                insertCommand.Parameters.AddWithValue("@description", Task.Description);
                 insertCommand.ExecuteReader();
                 db.Close();
             }
@@ -56,7 +56,7 @@ namespace uwp_to_do_list
         }
 
 
-        public void UpdateData(TaskTodo task)
+        public void UpdateData(int Id, string NameTask, string Date, string Reminder, string Priority, string NameList, string Description)
         {
             string dbpath = Path.Combine(ApplicationData.Current.LocalFolder.Path, "TasksSqlite.db");
             using (SqliteConnection db =
@@ -67,10 +67,18 @@ namespace uwp_to_do_list
                 SqliteCommand updateCommand = new SqliteCommand();
                 updateCommand.Connection = db;
                 try
-                {
-                    updateCommand.CommandText = "update task set due_date = @DueDate  where ID = @Id ";
-                    updateCommand.Parameters.AddWithValue("@DueDate", task.Date);
-                    updateCommand.Parameters.AddWithValue("@Id", task.TaskId);
+                {                   
+                    updateCommand.CommandText = "update Task set Name_task = @NameTask,  due_date = @DueDate, reminder = @Reminder, priority = @Priority, list = @List, description = @Description" +
+                        "where Primary_Key = @ID ";
+                    updateCommand.Parameters.AddWithValue("@DueDate", Date);
+                    updateCommand.Parameters.AddWithValue("@ID", Id);
+                    updateCommand.Parameters.AddWithValue("@NameTask", NameTask);
+                    updateCommand.Parameters.AddWithValue("@Reminder", Reminder);
+                    updateCommand.Parameters.AddWithValue("@Priority", Priority);
+                    updateCommand.Parameters.AddWithValue("@List", NameList);
+                    updateCommand.Parameters.AddWithValue("@Description",Description);
+                    updateCommand.ExecuteReader();
+                    db.Close();
                 }
                 catch (Exception ex)
                 {
