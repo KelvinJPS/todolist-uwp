@@ -80,7 +80,7 @@
             <Popup Name="reminder_popup"  IsOpen="False">
                 <StackPanel BorderBrush="#08090A">
 
-                    <CalendarView  CalendarItemBackground="#151513"></CalendarView>
+                    <CalendarView Name="reminder_calendar" CalendarItemBackground="#151513"></CalendarView>
 
                     <TimePicker Name="reminder_time_picker" Width="295" Background="#151513"></TimePicker>
                     <Grid>

@@ -10,41 +10,34 @@ namespace uwp_to_do_list
 {
     public class TaskTodo : INotifyPropertyChanged
     {
+        private string _NameTask, _Reminder, _Date, _Priority,_NameList,_Description; 
+        private int _Id;
         public TaskTodo()
-        {
-            
-            NameTask = default;
-            Reminder = String.Empty;
-            Date     = String.Empty;
-            Priority = String.Empty;
-            NameList = String.Empty;
-            Description = String.Empty;
+        {        
+          _NameTask = String.Empty;
+          _Reminder  = String.Empty;
+          _Date      = String.Empty;
+          _Priority  = String.Empty;
+          _NameList  = String.Empty;
+         _Description = String.Empty;
         }
-
-        public int TaskId { get  ; set; }
-        public string NameTask { get; set; }
-        public string Reminder { get; set; }
-        public string NameList { get; set; }
-        public string Date { get; set; }
-        public string Priority { get; set; }
-
-        public string Description { get; set; }
-         
-        
+        public int TaskId { get { return _Id; }  set { _Id = value; NotifyPropertyChanged(TaskId.ToString()); } }
+        public string NameTask { get { return _NameTask; } set { _NameTask = value; NotifyPropertyChanged(NameTask);  } }
+        public string Reminder { get { return _Reminder; } set { _Reminder = value; NotifyPropertyChanged(Reminder); } }
+        public string NameList {  get { return _NameList; } set  { _NameList = value; NotifyPropertyChanged(NameList); } }
+        public string Date { get { return _Date; } set { _Date = value; NotifyPropertyChanged(Date); }  }
+        public string Priority { get { return _Priority; } set { _Priority = value; NotifyPropertyChanged(Priority); } }
+        public string Description { get { return _Description;  } set { _Description = value; NotifyPropertyChanged(Description); } } 
 
         public event PropertyChangedEventHandler PropertyChanged;
-        private void NotifyPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-            updateTask(TaskId, NameTask, Date, Reminder, Priority, NameList, Description);
-        }
 
+        private void NotifyPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));                     
+        
 
         public ObservableCollection<TaskTodo> GetTasks()
         {
             var Tasks = new ObservableCollection<TaskTodo>();
             //get data from sqlite3
-
             string dbpath = Path.Combine(ApplicationData.Current.LocalFolder.Path, "TasksSqlite.db");
             using (SqliteConnection db =
                new SqliteConnection($"Filename={dbpath}"))
@@ -74,36 +67,26 @@ namespace uwp_to_do_list
                     catch (Exception ex)
                     {
                         Debug.WriteLine(ex.Message);
-                    }
-                        
+                    }                    
                 }
-
                 db.Close();
             }
-
             return Tasks;
         }
 
-     
        public void AddTask(TaskTodo task)
         {
             sqliteControler sqliteControler = new sqliteControler();
             sqliteControler.InitializeDatabase();
-            sqliteControler.AddData(task);
-                               
+            sqliteControler.AddData(task);                           
         }
-
-        public void updateTask(int Id, string NameTask, string Date,string Reminder, string Priority, string NameList, string Description)
+        public void UpdateTask(int Id, string NameTask, string Date,string Reminder, string Priority, string NameList, string Description)
         {
-
+           
             sqliteControler sqliteControler = new sqliteControler();
-            sqliteControler.UpdateData(TaskId, NameTask, Date, Reminder, Priority, NameList, Description);
-        }
-
-       
-        
-    }
-    
+            sqliteControler.UpdateData(Id, NameTask, Date, Reminder, Priority, NameList, Description);
+        }      
+    }   
 }
 
 
