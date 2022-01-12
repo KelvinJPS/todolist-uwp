@@ -8,23 +8,44 @@
     mc:Ignorable="d"
    Background="#08090A"       
     >
+    <Page.Resources>
+        <Style x:Key="TextBoxStyle1" TargetType="TextBox">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Grid>
+                            <Border x:Name="BorderElement" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Control.IsTemplateFocusTarget="True"/>
+                            <ScrollViewer x:Name="ContentElement" AutomationProperties.AccessibilityView="Raw" HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}" HorizontalScrollMode="{TemplateBinding ScrollViewer.HorizontalScrollMode}" IsDeferredScrollingEnabled="{TemplateBinding ScrollViewer.IsDeferredScrollingEnabled}" IsTabStop="False" IsVerticalRailEnabled="{TemplateBinding ScrollViewer.IsVerticalRailEnabled}" IsHorizontalRailEnabled="{TemplateBinding ScrollViewer.IsHorizontalRailEnabled}" Margin="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}" VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}" VerticalScrollMode="{TemplateBinding ScrollViewer.VerticalScrollMode}" ZoomMode="Disabled"/>
+                            <TextBlock x:Name="PlaceholderTextContentPresenter" Foreground="{Binding PlaceholderForeground, RelativeSource={RelativeSource Mode=TemplatedParent}, TargetNullValue={ThemeResource TextControlPlaceholderForeground}}" IsHitTestVisible="False" Margin="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}" TextAlignment="{TemplateBinding TextAlignment}" TextWrapping="{TemplateBinding TextWrapping}" Text="{TemplateBinding PlaceholderText}"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <ControlTemplate x:Key="CalendarViewTemplate1" TargetType="CalendarView">
+           
+        </ControlTemplate>
+      
+    </Page.Resources>
+    
+    
 
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"></ColumnDefinition>
             <ColumnDefinition Width="auto"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
- 
+
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
- 
+
         </Grid.RowDefinitions>
         <StackPanel Background="#04000E" Width="240"  Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" >
-        
+
             <TextBlock Text="today" Foreground="White" FontSize="24" HorizontalAlignment="Center" Margin="0,50,0,0"></TextBlock>
             <fa:FontAwesome Icon="CalendarCheckOutline" Height="40" Width="40" FontSize="40" Foreground="Fuchsia" HorizontalAlignment="Left" Margin="20,-35,0,0"></fa:FontAwesome>
             <TextBlock Text="Tomorrow" Foreground="White" FontSize="24" HorizontalAlignment="Center" Margin="0,20,0,0"></TextBlock>
@@ -106,20 +127,20 @@
 
 
             <ListView Name="listView_FormData" >
-                
-                
+
+
                 <Button Name="Calendar_Button" Click="calendar_button"  Background="Transparent">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="auto"></ColumnDefinition>
-                                <ColumnDefinition Width="auto"></ColumnDefinition>
-                            </Grid.ColumnDefinitions>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"></ColumnDefinition>
+                            <ColumnDefinition Width="auto"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
 
-                            <fa:FontAwesome Grid.Column="0" Icon="Calendar" FontSize="20" Foreground="Fuchsia" ></fa:FontAwesome>
-                            <TextBlock Grid.Column="1" Text=" Due Date" FontSize="20"></TextBlock>
+                        <fa:FontAwesome Grid.Column="0" Icon="Calendar" FontSize="20" Foreground="Fuchsia" ></fa:FontAwesome>
+                        <TextBlock Grid.Column="1" Text=" Due Date" FontSize="20"></TextBlock>
 
-                        </Grid>
-                    </Button>
+                    </Grid>
+                </Button>
 
                 <Button Name="reminder_button" Click="reminder_button_Click">
 
@@ -142,18 +163,120 @@
                     </Grid.ColumnDefinitions>
 
                     <fa:FontAwesome Grid.Column="0" Icon="List" FontSize="20" Foreground="Fuchsia" ></fa:FontAwesome>
-                    <TextBlock Grid.Column="1"  Text=" List" FontSize="20"></TextBlock>
+                    <TextBox Name="list_name" KeyDown="list_name_KeyDown"  Grid.Column="1"  BorderThickness="0" BorderBrush="Transparent" Background="Transparent" Text="List" FontSize="20" Style="{StaticResource TextBoxStyle1}"></TextBox>
 
                 </Grid>
 
-                <Grid>
+                <Grid Name="repeat_grid">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto"></ColumnDefinition>
                         <ColumnDefinition Width="auto"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
 
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+
+                    </Grid.RowDefinitions>
+
                     <fa:FontAwesome Grid.Column="0"  Icon="Repeat" FontSize="20" Foreground="Fuchsia" ></fa:FontAwesome>
-                    <TextBlock Grid.Column="1" Text=" Repeat" FontSize="20"></TextBlock>
+                    <Button Name="repeat_button" Grid.Column="1"  Content="Repeat" Click="repeat_button_Click"  FontSize="20"></Button>
+
+                    <Popup Name="repeat_options_popup"  Grid.Column="2" Grid.Row="1">
+                        <ListView Background="#08090A" Width="210" Height="200">
+
+                            <Button  Name="daily_repeat"   Click="daily_repeat_Click"   Background="Transparent" HorizontalContentAlignment="Left"  Width="210"  Content="Daily"   BorderBrush="Transparent" BorderThickness="0"></Button>
+                            <Button  Name="weekly_repeat"  Click="weekly_repeat_Click"  Background="Transparent" HorizontalContentAlignment="Left"  Width="210"  Content="weekly"  BorderBrush="Transparent" BorderThickness="0"></Button>
+                            <Button  Name="monthly_repeat" Click="monthly_repeat_Click" Background="Transparent" HorizontalContentAlignment="Left"  Width="210"  Content="montly"  BorderBrush="Transparent" BorderThickness="0"></Button>
+                            <Button  Name="yearly_repeat"  Click="yearly_repeat_Click"  Background="Transparent" HorizontalContentAlignment="Left"  Width="210"  Content= "yearly" BorderBrush="Transparent" BorderThickness="0"></Button>
+                            <Button  Name="custom_repeat"  Click="custom_repeat_Click"  Background="Transparent" HorizontalContentAlignment="Left"  Width="210"  Content= "Custom" BorderBrush="Transparent" BorderThickness="0"></Button>
+
+                        </ListView>
+
+
+                    </Popup>
+
+                    <Popup x:Name="custom_repeat_popup" Grid.Column="0" Grid.Row="1">
+
+                        <StackPanel Background="#08090A">
+
+                            <Grid >
+                                <Grid.ColumnDefinitions>
+
+                                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                                    <ColumnDefinition Width="auto"></ColumnDefinition>
+
+                                </Grid.ColumnDefinitions>
+
+                                <Grid.RowDefinitions>
+
+                                    <RowDefinition Height="auto"></RowDefinition>
+                                    <RowDefinition Height="auto"></RowDefinition>
+                                    <RowDefinition Height="auto"></RowDefinition>
+
+
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Text="Repeat every ..." Grid.Row="0" Grid.Column="0"></TextBlock>
+                                <TextBox  Name="number_repeat" BeforeTextChanging="number_repeat_BeforeTextChanging" Grid.Column="0" Grid.Row="1" Text="1" BorderThickness="0" Width="70" HorizontalAlignment="Right" Style="{StaticResource TextBoxStyle1}"  />
+
+                                <ComboBox x:Name="custom_repeat_combobox" Grid.Row="1" Grid.Column="1" Width="125" HorizontalAlignment="Left" SelectionChanged="custom_repeat_combobox_SelectionChanged">
+                                    <ComboBoxItem Name="DaysComboBox"   Content="days"></ComboBoxItem>
+                                    <ComboBoxItem Name="WeeksComboBox"  Content="weeks"></ComboBoxItem>
+                                    <ComboBoxItem Name="MonthsComboBox" Content="months"></ComboBoxItem>
+                                    <ComboBoxItem Name="YearsComboBox"  Content="years"></ComboBoxItem>
+                                </ComboBox>
+
+                            </Grid>
+                           
+                            <CalendarView  x:Name="custom_month_calendar"  Visibility="Collapsed" FontSize="4" DayItemFontSize="15" SelectionMode="Multiple" />
+
+
+                            <StackPanel Name="week_calendar" Visibility="Collapsed" >
+                                <GridView SelectionMode="Multiple" IsMultiSelectCheckBoxEnabled="False" SelectionChanged="GridView_SelectionChanged"   >
+
+                                    <TextBlock Text="Mo"></TextBlock>
+                                    <TextBlock Text="Tu"></TextBlock>
+                                    <TextBlock Text="We"></TextBlock>
+                                    <TextBlock Text="Th"></TextBlock>
+                                    <TextBlock Text="Fr"></TextBlock>
+                                
+                                </GridView>
+
+                                <GridView SelectionMode="Multiple" IsMultiSelectCheckBoxEnabled="False" SelectionChanged="GridView_SelectionChanged">
+                                    
+                                    <TextBlock Text="Sa"></TextBlock>
+                                    <TextBlock Text="Su"></TextBlock>
+                                    
+                                </GridView>
+
+
+                            </StackPanel>
+
+
+                            <Grid HorizontalAlignment="Center" Name="buttons_repeat_grid" Margin="10,15,0,10" Padding="5">
+
+                                <Grid.ColumnDefinitions>
+
+                                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                                    <ColumnDefinition Width="auto"></ColumnDefinition>
+
+                                </Grid.ColumnDefinitions>
+
+                                <Grid.RowDefinitions>
+
+                                    <RowDefinition Height="auto"></RowDefinition>
+                                    <RowDefinition Height="auto"></RowDefinition>
+
+                                </Grid.RowDefinitions>
+
+                                <Button Content="save" Name="save_repeat" Grid.Column="0" Click="save_repeat_Click"  Background="#1EAE70" Width="100" Margin="0,0,10,0"></Button>
+                                <Button Name="cancel_repeat" Content="cancel" Grid.Column="1" Click="cancel_repeat_Click"  Background="#151513" Width="100" ></Button>
+                            </Grid>
+
+                        </StackPanel>
+                    </Popup>
 
                 </Grid>
 
@@ -172,7 +295,7 @@
                     <fa:FontAwesome Grid.Column="0" Grid.Row="0" Icon="Flag" FontSize="20" Foreground="Fuchsia" ></fa:FontAwesome>
                     <TextBlock Margin="0,0,10,0" Grid.Column="1" Text=" Priority"  FontSize="20"></TextBlock>
 
-                    <RadioButton Name="low" Click="priority_checkbox_click" Grid.Column="2"></RadioButton>
+                    <RadioButton Name="low"    Click="priority_checkbox_click" Grid.Column="2"></RadioButton>
                     <RadioButton Name="medium" Click="priority_checkbox_click" Grid.Column="4"></RadioButton>
                     <RadioButton Name="high"   Click="priority_checkbox_click" Grid.Column="6"></RadioButton>
 
@@ -183,26 +306,25 @@
                 </Grid>
 
             </ListView>
-            <TextBlock Text="Subtasks" FontSize="20" HorizontalAlignment="Center"></TextBlock>
+            
+            
             <ListView>
-                <Grid>
 
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto"></ColumnDefinition>
-                        <ColumnDefinition Width="auto"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
+                <StackPanel Background="Transparent" >
 
-                    <RadioButton Grid.Column="0"></RadioButton>
-                    <TextBox  Width="250" Margin="-80,0,0,0" Background="Transparent" PlaceholderText="add subtask"  Grid.Column="1" Name="SubTask" ></TextBox>
+                    <TextBlock  Text="Subtasks" FontSize="20" HorizontalAlignment="Center" ></TextBlock>
 
-                </Grid>
+                    <TextBox  Width="250" Background="Transparent" PlaceholderText="add subtask" KeyDown="SubTask_KeyDown" Grid.Column="1" Name="SubTask" ></TextBox>
+                    <ListView  Name="subtask_list"></ListView>
 
-                <TextBox Margin="0,50,0,0" Name="descriptions_textbox" KeyDown="descriptions_textbox_KeyDown" PlaceholderText="Add a note" Width="300" TextWrapping="Wrap"></TextBox>
+                </StackPanel>
+
+                <TextBox Margin="0,30,0,0"  Name="descriptions_textbox" KeyDown="descriptions_textbox_KeyDown" PlaceholderText="Add a note" Width="300" TextWrapping="Wrap"></TextBox>
 
             </ListView>
-            
+
         </StackPanel>
-       
-       
+
+
     </Grid>
 </Page> 

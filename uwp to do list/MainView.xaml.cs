@@ -3,24 +3,33 @@ using System.Diagnostics;
 using System;
 using System.Collections.ObjectModel;
 using Microsoft.Toolkit.Uwp.Notifications; // Notifications library
+using System.Linq;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using Windows.UI.Xaml.Media;
 
 namespace uwp_to_do_list
 {
     public sealed partial class MainView : Page
     {
         ObservableCollection<TaskTodo> Tasks = new ObservableCollection<TaskTodo>();
+        ObservableCollection<string> SubTasks = new ObservableCollection<string>();
         TaskTodo task = new TaskTodo();
         Func<DateTimeOffset, string> SetDate = (date) => string.Format("{0}-{1}-{2}", date.Day, date.Month, date.Year);
 
+        
         public MainView()
         {
             this.InitializeComponent();
 
             Tasks = task.GetTasks();
             task_list.ItemsSource = Tasks;
-
+            subtask_list.ItemsSource = SubTasks;
+            number_repeat.MaxLength = 3;      
 
         }
+        
+     
         private void add_Task_textbox_KeyDown(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
         {
             if (e.Key == Windows.System.VirtualKey.Enter)
@@ -36,6 +45,7 @@ namespace uwp_to_do_list
                 add_Task_textbox.Text = String.Empty;
                 add_Task_textbox.Focus(Windows.UI.Xaml.FocusState.Keyboard);
 
+                task_list.SelectedItem = task;
             }
 
         }
@@ -49,8 +59,12 @@ namespace uwp_to_do_list
 
         }
 
-        private void calendar_button(object sender, Windows.UI.Xaml.RoutedEventArgs e) => calendar_popup.IsOpen = true;
-
+        private void calendar_button(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            calendar_popup.IsOpen = true;
+            calendar_date.SelectedDates.Add(DateTimeOffset.Now);
+        }
+          
         private void quit_TaskForm_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e) => TaskForm.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
 
         private void cancel_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
@@ -62,9 +76,7 @@ namespace uwp_to_do_list
         private void save_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             calendar_popup.IsOpen = false;
-            //if the date is not selected set the actual date
-            if (calendar_date.SelectedDates.Count > 0) task.Date = SetDate(calendar_date.SelectedDates[0]);
-            else task.Date = SetDate(DateTimeOffset.Now);
+            task.Date = SetDate(calendar_date.SelectedDates[0]);
 
             task.UpdateTask(task.TaskId, task.NameTask, task.Date, task.Reminder, task.Priority, task.NameList, task.Description);
             calendar_date.SelectedDates.Clear();
@@ -113,7 +125,6 @@ namespace uwp_to_do_list
             reminder_calendar.SelectedDates.Add(DateTimeOffset.Now);
         }
 
-
         private void SheduleNotification(DateTimeOffset Date)
         {
             // sheduled notification 
@@ -129,7 +140,113 @@ namespace uwp_to_do_list
 
         }
 
+        private void list_name_KeyDown(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
+        {
+            if (e.Key == Windows.System.VirtualKey.Enter)
+            {
+                task.NameList = list_name.Text;
+                task.UpdateTask(task.TaskId, task.NameTask, task.Date, task.Reminder, task.Priority, task.NameList, task.Description);
 
+                this.Focus(Windows.UI.Xaml.FocusState.Pointer);
+            }
+        }
+
+        private void repeat_button_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            if (repeat_options_popup.IsOpen == true)
+                repeat_options_popup.IsOpen = false;
+
+            else
+                repeat_options_popup.IsOpen = true;
+
+
+        }
+
+        private void daily_repeat_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+         
+        }
+
+        private void weekly_repeat_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+
+        }
+
+        private void monthly_repeat_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+
+        }
+
+        private void yearly_repeat_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+
+        }
+
+        private void custom_repeat_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            repeat_options_popup.IsOpen = false;
+            custom_repeat_popup.IsOpen= true;
+        }
+
+        private void number_repeat_BeforeTextChanging(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
+        {
+            // only numbers in textbox
+            args.Cancel = args.NewText.Any(c => !char.IsNumber(c));         
+        }
+
+        private void cancel_repeat_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e) => custom_repeat_popup.IsOpen = false;
+
+        private void save_repeat_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            custom_repeat_popup.IsOpen = false; 
+              
+           
+        }
+
+        private void custom_repeat_combobox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {  
+            ComboBox ComboBox = sender as ComboBox;
+            ComboBoxItem ComboBoxSelected = ComboBox.SelectedItem as ComboBoxItem;
+           
+            if (ComboBoxSelected != null)
+            {
+                custom_month_calendar.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                week_calendar.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+
+                switch (ComboBoxSelected.Name)
+                {
+                    case "MonthsComboBox":
+                       
+                        custom_month_calendar.Visibility = Windows.UI.Xaml.Visibility.Visible;
+
+                        break;
+
+                    case "DaysComboBox":
+                        
+                        break ;
+
+                    case "WeeksComboBox":
+            
+                        week_calendar.Visibility = Windows.UI.Xaml.Visibility.Visible;
+
+                        break;
+                }
+            }
+        }
+        private void GridView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void SubTask_KeyDown(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
+        {
+            if (e.Key == Windows.System.VirtualKey.Enter)
+            {
+               string subtask = SubTask.Text;
+               SubTasks.Add(subtask);
+
+            }
+        }
     }
 
 }
