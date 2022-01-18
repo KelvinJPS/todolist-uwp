@@ -10,8 +10,9 @@ namespace uwp_to_do_list
 {
     public class TaskTodo : INotifyPropertyChanged
     {
-        private string _NameTask, _Reminder, _Date, _Priority,_NameList,_Description; 
-        private int _Id;
+        private string _NameTask, _Reminder, _Date, _Priority,_NameList,_Description;
+        private int _Id, _ParentTask;
+        private DateTimeOffset _NextRep;
         public TaskTodo()
         {        
           _NameTask = String.Empty;
@@ -20,6 +21,7 @@ namespace uwp_to_do_list
           _Priority  = String.Empty;
           _NameList  = String.Empty;
          _Description = String.Empty;
+         
         }
         public int TaskId { get { return _Id; }  set { _Id = value; NotifyPropertyChanged(TaskId.ToString()); } }
         public string NameTask { get { return _NameTask; } set { _NameTask = value; NotifyPropertyChanged(NameTask);  } }
@@ -28,7 +30,9 @@ namespace uwp_to_do_list
         public string Date { get { return _Date; } set { _Date = value; NotifyPropertyChanged(Date); }  }
         public string Priority { get { return _Priority; } set { _Priority = value; NotifyPropertyChanged(Priority); } }
         public string Description { get { return _Description;  } set { _Description = value; NotifyPropertyChanged(Description); } } 
-
+        public DateTimeOffset NextRep { get { return _NextRep; } set { _NextRep= value; NotifyPropertyChanged(NextRep.ToString()); } }      
+        public int  ParentTask { get { return _ParentTask; } set { _ParentTask = value; NotifyPropertyChanged(TaskId.ToString()); } }
+       
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void NotifyPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));                     
@@ -80,12 +84,14 @@ namespace uwp_to_do_list
             sqliteControler.InitializeDatabase();
             sqliteControler.AddData(task);                           
         }
-        public void UpdateTask(int Id, string NameTask, string Date,string Reminder, string Priority, string NameList, string Description)
+        public void UpdateTask()
         {
            
             sqliteControler sqliteControler = new sqliteControler();
-            sqliteControler.UpdateData(Id, NameTask, Date, Reminder, Priority, NameList, Description);
-        }      
+            sqliteControler.UpdateData(TaskId, NameTask, Date, Reminder, Priority, NameList, Description, NextRep);
+        }
+  
+       
     }   
 }
 

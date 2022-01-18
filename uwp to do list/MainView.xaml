@@ -183,14 +183,15 @@
                     <Button Name="repeat_button" Grid.Column="1"  Content="Repeat" Click="repeat_button_Click"  FontSize="20"></Button>
 
                     <Popup Name="repeat_options_popup"  Grid.Column="2" Grid.Row="1">
-                        <ListView Background="#08090A" Width="210" Height="200">
+                        <ListView Background="#08090A" Width="210" Height="200" Name="Repeat_options" SelectionChanged="ListView_SelectionChanged" >
 
-                            <Button  Name="daily_repeat"   Click="daily_repeat_Click"   Background="Transparent" HorizontalContentAlignment="Left"  Width="210"  Content="Daily"   BorderBrush="Transparent" BorderThickness="0"></Button>
-                            <Button  Name="weekly_repeat"  Click="weekly_repeat_Click"  Background="Transparent" HorizontalContentAlignment="Left"  Width="210"  Content="weekly"  BorderBrush="Transparent" BorderThickness="0"></Button>
-                            <Button  Name="monthly_repeat" Click="monthly_repeat_Click" Background="Transparent" HorizontalContentAlignment="Left"  Width="210"  Content="montly"  BorderBrush="Transparent" BorderThickness="0"></Button>
-                            <Button  Name="yearly_repeat"  Click="yearly_repeat_Click"  Background="Transparent" HorizontalContentAlignment="Left"  Width="210"  Content= "yearly" BorderBrush="Transparent" BorderThickness="0"></Button>
-                            <Button  Name="custom_repeat"  Click="custom_repeat_Click"  Background="Transparent" HorizontalContentAlignment="Left"  Width="210"  Content= "Custom" BorderBrush="Transparent" BorderThickness="0"></Button>
+                            <TextBlock Name = "Daily"  Text = "Daily" ></TextBlock>
+                            <TextBlock Name = "Weekly" Text = "Weekly"></TextBlock>
+                            <TextBlock Name = "Montly" Text = "Montly"></TextBlock>
+                            <TextBlock Name = "Yearly" Text = "Yearly"></TextBlock>
+                            <TextBlock Name = "Custom" Text = "Custom"></TextBlock>
 
+                            
                         </ListView>
 
 
@@ -314,8 +315,16 @@
 
                     <TextBlock  Text="Subtasks" FontSize="20" HorizontalAlignment="Center" ></TextBlock>
 
-                    <TextBox  Width="250" Background="Transparent" PlaceholderText="add subtask" KeyDown="SubTask_KeyDown" Grid.Column="1" Name="SubTask" ></TextBox>
-                    <ListView  Name="subtask_list"></ListView>
+                    <TextBox  Width="250" Background="Transparent" PlaceholderText="add subtask" KeyDown="SubTask_KeyDown" Grid.Column="1" Name="SubTask_TexBox" ></TextBox>
+                    <ListView  Name="subtask_list">
+
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="local:TaskTodo">
+                                <TextBlock Width="100" Foreground="White" Text="{x:Bind NameTask}" />
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+
+                    </ListView>
 
                 </StackPanel>
 

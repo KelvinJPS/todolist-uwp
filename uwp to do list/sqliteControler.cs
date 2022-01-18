@@ -43,13 +43,15 @@ namespace uwp_to_do_list
                     insertCommand.Connection = db;
 
                     // Use parameterized query to prevent SQL injection attacks
-                    insertCommand.CommandText = "INSERT INTO Task VALUES (NULL, @NameTask,@DueDate,@Reminder,@Priority,@List,@description);";
+                    insertCommand.CommandText = "INSERT INTO Task VALUES (NULL, @NameTask,@DueDate,@Reminder,@Priority,@List,@description,@NextRep,@ParentTask);";
                     insertCommand.Parameters.AddWithValue("@NameTask", Task.NameTask);
                     insertCommand.Parameters.AddWithValue("@DueDate", Task.Date);
                     insertCommand.Parameters.AddWithValue("@Reminder", Task.Reminder);
                     insertCommand.Parameters.AddWithValue("@Priority", Task.Priority);
                     insertCommand.Parameters.AddWithValue("@List", Task.NameList);
                     insertCommand.Parameters.AddWithValue("@description", Task.Description);
+                    insertCommand.Parameters.AddWithValue("@NextRep", Task.NextRep);
+                    insertCommand.Parameters.AddWithValue("@ParentTask", Task.ParentTask);
                     insertCommand.ExecuteReader();
                     db.Close();
                 }
@@ -59,7 +61,7 @@ namespace uwp_to_do_list
                 Debug.WriteLine(ex.ToString());
             }
         }
-        public void UpdateData(int Id, string NameTask, string Date, string Reminder, string Priority, string NameList, string Description)
+        public void UpdateData(int Id, string NameTask, string Date, string Reminder, string Priority, string NameList, string Description,DateTimeOffset NextRep)
         {
             string dbpath = Path.Combine(ApplicationData.Current.LocalFolder.Path, "TasksSqlite.db");
             using (SqliteConnection db =
@@ -71,7 +73,8 @@ namespace uwp_to_do_list
                 updateCommand.Connection = db;
                 try
                 {
-                    updateCommand.CommandText = "update Task set Name_task = @NameTask, due_date = @DueDate, reminder = @Reminder, priority = @Priority, list = @List, description = @Description where Primary_Key = @ID";
+                    updateCommand.CommandText = "update Task set Name_task = @NameTask, due_date = @DueDate, reminder = @Reminder, priority = @Priority, list = @List, description = @Description, next_rep = @NextRep" +
+                        " where Primary_Key = @ID";
                     updateCommand.Parameters.AddWithValue("@DueDate", Date);
                     updateCommand.Parameters.AddWithValue("@ID", Id);
                     updateCommand.Parameters.AddWithValue("@NameTask", NameTask);
@@ -79,6 +82,7 @@ namespace uwp_to_do_list
                     updateCommand.Parameters.AddWithValue("@Priority", Priority);
                     updateCommand.Parameters.AddWithValue("@List", NameList);
                     updateCommand.Parameters.AddWithValue("@Description", Description);
+                    updateCommand.Parameters.AddWithValue("@NextRep", NextRep);
                     updateCommand.ExecuteReader();
                     db.Close();
                 }
