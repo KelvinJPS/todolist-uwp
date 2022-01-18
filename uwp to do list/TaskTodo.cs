@@ -49,7 +49,7 @@ namespace uwp_to_do_list
                 db.Open();
 
                 SqliteCommand selectCommand = new SqliteCommand
-                    ("SELECT * from Task", db);
+                    ("SELECT * from Task where parent_task =0", db);
 
                 SqliteDataReader query = selectCommand.ExecuteReader();
 
