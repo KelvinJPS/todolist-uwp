@@ -27,7 +27,19 @@ namespace uwp_to_do_list
         public string NameTask { get { return _NameTask; } set { _NameTask = value; NotifyPropertyChanged(NameTask);  } }
         public string Reminder { get { return _Reminder; } set { _Reminder = value; NotifyPropertyChanged(Reminder); } }
         public string NameList {  get { return _NameList; } set  { _NameList = value; NotifyPropertyChanged(NameList); } }
-        public string Date { get { return _Date; } set { _Date = value; NotifyPropertyChanged(Date); }  }
+        public string Date { get { return _Date ; } set { _Date = value; NotifyPropertyChanged(Date); } }
+        public string FormatDate
+        {
+            get
+            {
+                DateTimeOffset DueDate;
+                if (DateTimeOffset.TryParse(_Date, out DueDate) == true)
+                {
+                    return String.Format(" {0},{1} {2}", DueDate.DayOfWeek, DueDate.Day, DueDate.ToString("MMM"));
+                }
+                return " Due Date";
+            }
+        }
         public string Priority { get { return _Priority; } set { _Priority = value; NotifyPropertyChanged(Priority); } }
         public string Description { get { return _Description;  } set { _Description = value; NotifyPropertyChanged(Description); } } 
         public DateTimeOffset NextRep { get { return _NextRep; } set { _NextRep= value; NotifyPropertyChanged(NextRep.ToString()); } }      
@@ -49,7 +61,7 @@ namespace uwp_to_do_list
                 db.Open();
 
                 SqliteCommand selectCommand = new SqliteCommand
-                    ("SELECT * from Task where parent_task =0", db);
+                    ("SELECT * from Task where parent_task = 0", db);
 
                 SqliteDataReader query = selectCommand.ExecuteReader();
 

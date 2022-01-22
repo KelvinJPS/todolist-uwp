@@ -4,9 +4,6 @@ using System;
 using System.Collections.ObjectModel;
 using Microsoft.Toolkit.Uwp.Notifications; // Notifications library
 using System.Linq;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using Windows.UI.Xaml.Media;
 
 namespace uwp_to_do_list
 {
@@ -16,28 +13,26 @@ namespace uwp_to_do_list
         ObservableCollection<TaskTodo> SubTasks = new ObservableCollection<TaskTodo>();
         TaskTodo task = new TaskTodo();
         Func<DateTimeOffset, string> SetDate = (date) => string.Format("{0}-{1}-{2}", date.Day, date.Month, date.Year);
-      
-        
+       
         public MainView()
         {
-            this.InitializeComponent();
-
+            this.InitializeComponent();  
             Tasks = task.GetTasks();
             task_list.ItemsSource = Tasks;
             subtask_list.ItemsSource = SubTasks;
-            number_repeat.MaxLength = 3;  
-
-       
+            number_repeat.MaxLength = 3;
+            this.DataContext = task;
         }
-          
+
         private void add_Task_textbox_KeyDown(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
         {
             if (e.Key == Windows.System.VirtualKey.Enter)
             {
+                TaskTodo Task = new TaskTodo();
                 //add task to de database and the observable collection
-                task.NameTask = add_Task_textbox.Text;
-                task.AddTask(task);
-                Tasks.Add(task);
+                Task.NameTask = add_Task_textbox.Text;
+                Task.AddTask(Task);
+                Tasks.Add(Task);
 
                 //show the task data 
                 TaskForm.Visibility = Windows.UI.Xaml.Visibility.Visible;
@@ -45,7 +40,7 @@ namespace uwp_to_do_list
                 add_Task_textbox.Text = String.Empty;
                 add_Task_textbox.Focus(Windows.UI.Xaml.FocusState.Keyboard);
 
-                task_list.SelectedItem = task;
+                task_list.SelectedItem = Task;
             }
 
         }
@@ -54,8 +49,13 @@ namespace uwp_to_do_list
         private void task_list_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             task = task_list.SelectedItem as TaskTodo;
+            this.DataContext = task;
             TaskForm.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            NameTask_form.Text = task.NameTask;
+
+            //update the values of the button from taskform
+            Calendar_Button.DataContext = task;
+            reminder_button.DataContext = task;
+            descriptions_textbox.DataContext = task;
         }
 
         private void calendar_button(object sender, Windows.UI.Xaml.RoutedEventArgs e)
@@ -76,9 +76,9 @@ namespace uwp_to_do_list
         {
             calendar_popup.IsOpen = false;
             task.Date = SetDate(calendar_date.SelectedDates[0]);
-
             task.UpdateTask();
             calendar_date.SelectedDates.Clear();
+          
         }
         private void reminder_cancel_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e) => reminder_popup.IsOpen = false;
 
@@ -216,7 +216,6 @@ namespace uwp_to_do_list
               TaskTodo SubTask = new TaskTodo();
               SubTask.NameTask = SubTask_TexBox.Text;
               Debug.WriteLine(task.NameTask);
-              Debug.WriteLine("sub");
               SubTask.ParentTask = task.TaskId; //the value of the task selected
               SubTasks.Add(SubTask);
               SubTask.AddTask(SubTask);
@@ -273,6 +272,7 @@ namespace uwp_to_do_list
                 }
             }
         }
+
     }
 
 }
