@@ -4,6 +4,7 @@ using System;
 using System.Collections.ObjectModel;
 using Microsoft.Toolkit.Uwp.Notifications; // Notifications library
 using System.Linq;
+using Windows.UI.Xaml;
 
 namespace uwp_to_do_list
 {
@@ -16,18 +17,22 @@ namespace uwp_to_do_list
        
         public MainView()
         {
-            this.InitializeComponent();  
+            this.InitializeComponent();
+
+         
             Tasks = task.GetTasks();
             task_list.ItemsSource = Tasks;
-            subtask_list.ItemsSource = SubTasks;
-            number_repeat.MaxLength = 3;
-            this.DataContext = task;
-        }
 
+            number_repeat.MaxLength = 3;
+
+
+        }
+      
         private void add_Task_textbox_KeyDown(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
         {
             if (e.Key == Windows.System.VirtualKey.Enter)
             {
+
                 TaskTodo Task = new TaskTodo();
                 //add task to de database and the observable collection
                 Task.NameTask = add_Task_textbox.Text;
@@ -48,14 +53,14 @@ namespace uwp_to_do_list
 
         private void task_list_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            task = task_list.SelectedItem as TaskTodo;
-            this.DataContext = task;
             TaskForm.Visibility = Windows.UI.Xaml.Visibility.Visible;
-
-            //update the values of the button from taskform
-            Calendar_Button.DataContext = task;
-            reminder_button.DataContext = task;
-            descriptions_textbox.DataContext = task;
+     
+            task = task_list.SelectedItem as TaskTodo;
+            
+            SubTasks = task.GetSubtasks();
+            subtask_list.ItemsSource = SubTasks;
+            CheckedPriority();
+            
         }
 
         private void calendar_button(object sender, Windows.UI.Xaml.RoutedEventArgs e)
@@ -76,9 +81,13 @@ namespace uwp_to_do_list
         {
             calendar_popup.IsOpen = false;
             task.Date = SetDate(calendar_date.SelectedDates[0]);
-            task.UpdateTask();
-            calendar_date.SelectedDates.Clear();
           
+            task.UpdateTask();
+           
+           
+            calendar_date.SelectedDates.Clear();
+            
+            
         }
         private void reminder_cancel_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e) => reminder_popup.IsOpen = false;
 
@@ -101,6 +110,8 @@ namespace uwp_to_do_list
             //clear values
             reminder_calendar.SelectedDates.Clear();
             reminder_time_picker.SelectedTime = null;
+           
+           
         }
         private void priority_checkbox_click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
@@ -215,10 +226,11 @@ namespace uwp_to_do_list
             {
               TaskTodo SubTask = new TaskTodo();
               SubTask.NameTask = SubTask_TexBox.Text;
-              Debug.WriteLine(task.NameTask);
               SubTask.ParentTask = task.TaskId; //the value of the task selected
-              SubTasks.Add(SubTask);
               SubTask.AddTask(SubTask);
+              SubTasks.Add(SubTask);
+              SubTask_TexBox.Text = String.Empty;
+              
             }
         }
 
@@ -267,12 +279,58 @@ namespace uwp_to_do_list
                         task.UpdateTask();
 
                         break;
-
-
                 }
             }
         }
 
+        private void list_name_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox textbox = sender as TextBox;
+            task.NameList = textbox.Text;
+            task.UpdateTask();
+        }
+
+        
+        private void CheckedPriority()
+        {
+            switch (task.Priority)
+            {
+                case "low":
+                    low.IsChecked = true;
+                    break;
+
+                case "medium":
+                    medium.IsChecked = true;
+                    break;
+
+                case "high":
+                    high.IsChecked = true;
+                    break;
+
+                default:
+                    low.IsChecked = false;
+                    medium.IsChecked = false;
+                    high.IsChecked = false;
+
+                    break;
+            }
+
+
+        }
+
+        private void descriptions_textbox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox textbox = sender as TextBox;
+            task.Description = textbox.Text;
+            task.UpdateTask();
+        }
+
+        private void NameTaskForm_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox textbox = sender as TextBox;
+            task.NameTask = textbox.Text;
+            task.UpdateTask();
+        }
     }
 
 }

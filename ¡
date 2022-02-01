@@ -1,0 +1,12 @@
+show task data on the form. 
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the co
+#
+# On branch master
+# Your branch is up to date with 'origin/master'.
+#
+# Changes to be committed:
+#	modified:   uwp to do list/MainView.xaml
+#	modified:   uwp to do list/MainView.xaml.cs
+#	modified:   uwp to do list/TaskTodo.cs
+# 
