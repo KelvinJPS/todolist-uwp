@@ -17,11 +17,11 @@ namespace uwp_to_do_list
         public TaskTodo()
         {        
           _NameTask =   String.Empty;
-          _Reminder  =  "Reminder";
-          _Date      =  " Due Date ";
-          _Priority  =   String.Empty;
+          _Reminder  =  String.Empty;
+          _Date      =  String.Empty;
+          _Priority  =  String.Empty;
           _NameList  =  "Tasks";
-         _Description = String.Empty;
+            _Description = String.Empty;
          _ParentTask =  -1;
             _Id = 1;
         }
@@ -98,7 +98,7 @@ namespace uwp_to_do_list
                         TaskTodo taskTodo = new TaskTodo();
                         taskTodo.TaskId   =  query.GetInt32(0);
                         taskTodo.NameTask =  query.GetString(1);
-                        taskTodo.Date    =  query.GetString(2);
+                        taskTodo.Date    =   query.GetString(2);
                         taskTodo.Reminder =  query.GetString(3);
                         taskTodo.Priority =  query.GetString(4);
                         taskTodo.NameList =  query.GetString(5);
