@@ -68,11 +68,11 @@ namespace uwp_to_do_list
             {
                 DateTimeOffset Date;
 
-                if(DateTimeOffset.TryParse(_Reminder, out Date) == true)
-                {
-                    return string.Format(" {0},{1} {2}", Date.DayOfWeek, Date.Day, Date.ToString("MMM"));
-                }
-                return "";
+                DateTimeOffset.TryParse(_Reminder, out Date);
+                
+                return string.Format(" {0},{1} {2}", Date.DayOfWeek, Date.Day, Date.ToString("MMM"));
+              
+              
             }
         }
 

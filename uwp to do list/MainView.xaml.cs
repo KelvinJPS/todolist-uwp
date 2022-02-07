@@ -14,7 +14,6 @@ namespace uwp_to_do_list
         ObservableCollection<TaskTodo> SubTasks = new ObservableCollection<TaskTodo>();
         TaskTodo task = new TaskTodo();
         Func<DateTimeOffset, string> SetDate = (date) => string.Format("{0}-{1}-{2}", date.Day, date.Month, date.Year);
-      
        
         public MainView()
         {
@@ -23,8 +22,10 @@ namespace uwp_to_do_list
          
             Tasks = task.GetTasks();
             task_list.ItemsSource = Tasks;
+            task_list.SelectedValuePath = "TaskId";
 
             number_repeat.MaxLength = 3;
+
 
         }
       
@@ -38,17 +39,30 @@ namespace uwp_to_do_list
                 Task.NameTask = add_Task_textbox.Text;
                 Task.AddTask(Task);
                 Tasks.Add(Task);
- 
-                
+
+                //show the task data 
+                TaskForm.Visibility = Windows.UI.Xaml.Visibility.Visible;
                 //clean the texbox and focus
                 add_Task_textbox.Text = String.Empty;
                 add_Task_textbox.Focus(Windows.UI.Xaml.FocusState.Keyboard);
 
-                 
+                task_list.SelectedItem = Task;
             }
 
         }
         private void add_Task_textbox_LostFocus(object sender, Windows.UI.Xaml.RoutedEventArgs e) => add_Task_textbox.Text = string.Empty;
+
+        private void task_list_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            TaskForm.Visibility = Windows.UI.Xaml.Visibility.Visible;
+     
+            task = task_list.SelectedItem as TaskTodo;
+            
+            SubTasks = task.GetSubtasks();
+            subtask_list.ItemsSource = SubTasks;
+            CheckedPriority();
+            
+        }
 
         private void calendar_button(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
@@ -68,13 +82,9 @@ namespace uwp_to_do_list
         {
             calendar_popup.IsOpen = false;
             task.Date = SetDate(calendar_date.SelectedDates[0]);
-          
             task.UpdateTask();
-           
-           
             calendar_date.SelectedDates.Clear();
-            
-            
+                
         }
         private void reminder_cancel_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e) => reminder_popup.IsOpen = false;
 
@@ -104,18 +114,10 @@ namespace uwp_to_do_list
         {
             RadioButton radioButton = sender as RadioButton;
             task.Priority = radioButton.Name;
-            task.UpdateTask();
+           
 
         }
-        private void descriptions_textbox_KeyDown(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
-        {
-            if (e.Key == Windows.System.VirtualKey.Enter)
-            {
-                task.Description = descriptions_textbox.Text;
-                task.UpdateTask();
-                descriptions_textbox.Text = string.Empty;
-            }
-        }
+   
         private void reminder_button_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             reminder_popup.IsOpen = true;
@@ -136,16 +138,7 @@ namespace uwp_to_do_list
 
         }
 
-        private void list_name_KeyDown(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
-        {
-            if (e.Key == Windows.System.VirtualKey.Enter)
-            {
-                task.NameList = list_name.Text;
-                task.UpdateTask();
-
-                this.Focus(Windows.UI.Xaml.FocusState.Pointer);
-            }
-        }
+      
 
         private void repeat_button_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
@@ -220,7 +213,10 @@ namespace uwp_to_do_list
               
             }
         }
-  
+
+        public bool CheckTaskRepeat(DateTimeOffset date) =>  date==DateTime.Today;
+
+        
         private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             TextBlock TextBlockSelected = Repeat_options.SelectedItem  as TextBlock;
@@ -239,28 +235,28 @@ namespace uwp_to_do_list
                     case "Daily":
 
                         task.NextRep = DateTime.Today.AddDays(1);
-                        task.UpdateTask();
+                       
                         break;
 
 
                     case "Weekly":
 
                         task.NextRep = DateTime.Today.AddDays(7);
-                        task.UpdateTask();
+                       
                         break;
 
 
                     case "Montly":
 
                         task.NextRep = DateTime.Today.AddMonths(1);
-                        task.UpdateTask();
+                        
                        
                         break;
 
                     case "Yearly":
 
                         task.NextRep = DateTime.Today.AddYears(1);
-                        task.UpdateTask();
+                       
 
                         break;
                 }
@@ -270,8 +266,9 @@ namespace uwp_to_do_list
         private void list_name_TextChanged(object sender, TextChangedEventArgs e)
         {
             TextBox textbox = sender as TextBox;
-            task.NameList = textbox.Text;
-            
+            task.NameList = Name_list.Text;
+            task.UpdateTask();
+          
         }
 
         
@@ -312,16 +309,8 @@ namespace uwp_to_do_list
         private void NameTaskForm_TextChanged(object sender, TextChangedEventArgs e)
         {
             TextBox textbox = sender as TextBox;
-            (task_list.SelectedItem as TaskTodo).NameTask = textbox.Text;
-             
-           
-
-
-        }
-        
-        private void task_list_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            TaskForm.Visibility = Visibility.Visible;
+            (task_list.SelectedItem as TaskTodo).NameTask = NameTaskForm.Text;
+            task.UpdateTask();
         }
     }
 
