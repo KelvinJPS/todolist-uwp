@@ -22,11 +22,13 @@ namespace uwp_to_do_list
           _Reminder  =  String.Empty;
           _Date =       String.Empty;
           _Priority  =  String.Empty;
-          _NameList  =  "Tasks";
-            _Description = String.Empty;
+          _NameList  =  String.Empty;
+          _Description = String.Empty;
          _ParentTask =  -1;
-            _Id = 1;
+         _Id = 1;
         }
+  
+        Resource_Manager rm = new Resource_Manager();
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void NotifyPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -34,7 +36,20 @@ namespace uwp_to_do_list
         public int TaskId { get { return _Id; }  set { _Id = value; NotifyPropertyChanged(TaskId.ToString()); } }
         public string NameTask { get { return _NameTask; } set { _NameTask = value; NotifyPropertyChanged(NameTask); } }
         public string Reminder { get { return _Reminder; } set { _Reminder = value; NotifyPropertyChanged(FormatDateReminder); } }
-        public string NameList {  get { return _NameList; } set  { _NameList = value; NotifyPropertyChanged(NameList); } }
+        public string NameList {  
+            get 
+            {
+                if ( _NameList == string.Empty || _NameList == null)
+                {
+                    return rm.GetDefaultNamelist;
+                }
+                return _NameList;
+
+                }
+            set { _NameList = value; NotifyPropertyChanged(NameList); }
+        }
+   
+           
         public string Date { get { return _Date ; } set { _Date = value; NotifyPropertyChanged(FormatDate); } }
         public string FormatDate
         {
@@ -42,16 +57,14 @@ namespace uwp_to_do_list
             {
                 var cultureInfo = new CultureInfo("en-US");
                 DateTimeOffset DueDate;
-                Resource_Manager rm = new Resource_Manager();
+                
                 if (Date != string.Empty && Date != null)
                 {
                     DueDate = DateTimeOffset.Parse(Date, cultureInfo);
                     return String.Format(" {0},{1} {2}", DueDate.DayOfWeek, DueDate.Day, DueDate.ToString("MMM"));
                 }
                 else                   
-                    return rm.GetDefaultDate;
-                
-
+                    return rm.GetDefaultDate;             
             }
              
     }
@@ -64,13 +77,12 @@ namespace uwp_to_do_list
             get {
                 DateTime Time;
                 var cultureInfo = new CultureInfo("en-US");
-
                 if ( Reminder != string.Empty && Reminder !=  null )
                 {
                     Time = DateTime.Parse (Reminder, cultureInfo);
                     return string.Format(" Remind me at {0}:{1}", Time.Hour, Time.Minute);
                 }
-                Resource_Manager rm = new Resource_Manager();
+               
                 
                 return rm.GetDefaultReminder;
                 

@@ -25,7 +25,10 @@ namespace uwp_to_do_list
             get => rm.GetString("DefaultReminder");
         }
    
-       
+       public string GetDefaultNamelist
+        {
+            get => rm.GetString("DefaultNameList");
+        }
     }
 }
 
