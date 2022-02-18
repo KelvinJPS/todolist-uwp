@@ -20,7 +20,11 @@ namespace uwp_to_do_list
             get =>  rm.GetString("DefaultDueDate");                   
         }
 
-     
+        public string GetDefaultReminder
+        {
+            get => rm.GetString("DefaultReminder");
+        }
+   
        
     }
 }

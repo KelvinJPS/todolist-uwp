@@ -87,9 +87,8 @@ namespace uwp_to_do_list
             }
             
             SheduleNotification(Date);
-            task.Reminder = string.Format("{0}-{1}-{2} {3}:{4}:{5}", Date.Day, Date.Month, Date.Year, Date.Hour, Date.Minute, Date.Second);
+            (task_list.SelectedItem as TaskTodo).Reminder = string.Format("{0}-{1}-{2} {3}:{4}:{5}", Date.Month, Date.Day, Date.Year, Date.Hour, Date.Minute, Date.Second);
             //update in DB
-            task.UpdateTask();
             //clear values
             reminder_calendar.SelectedDates.Clear();
             reminder_time_picker.SelectedTime = null;

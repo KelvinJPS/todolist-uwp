@@ -120,7 +120,7 @@
   <data name="DefaultDueDate" xml:space="preserve">
     <value>Add due date </value>
   </data>
-  <data name="DueDate" xml:space="preserve">
-    <value>Due date</value>
+  <data name="DefaultReminder" xml:space="preserve">
+    <value>Add reminder</value>
   </data>
 </root>

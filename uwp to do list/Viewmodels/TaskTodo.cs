@@ -48,8 +48,7 @@ namespace uwp_to_do_list
                     DueDate = DateTimeOffset.Parse(Date, cultureInfo);
                     return String.Format(" {0},{1} {2}", DueDate.DayOfWeek, DueDate.Day, DueDate.ToString("MMM"));
                 }
-                else
-                    
+                else                   
                     return rm.GetDefaultDate;
                 
 
@@ -62,13 +61,19 @@ namespace uwp_to_do_list
         public int  ParentTask { get { return _ParentTask; } set { _ParentTask = value; NotifyPropertyChanged(TaskId.ToString()); } }      
         public string FormatTimeReminder
         {
-            get { DateTime Time;
-                 if( DateTime.TryParse(_Reminder, out Time) == true)
+            get {
+                DateTime Time;
+                var cultureInfo = new CultureInfo("en-US");
+
+                if ( Reminder != string.Empty && Reminder !=  null )
                 {
+                    Time = DateTime.Parse (Reminder, cultureInfo);
                     return string.Format(" Remind me at {0}:{1}", Time.Hour, Time.Minute);
                 }
-
-                return Reminder;
+                Resource_Manager rm = new Resource_Manager();
+                
+                return rm.GetDefaultReminder;
+                
             } 
         }
 
