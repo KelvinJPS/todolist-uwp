@@ -82,8 +82,7 @@ namespace uwp_to_do_list
                     Time = DateTime.Parse (Reminder, cultureInfo);
                     return string.Format(" Remind me at {0}:{1}", Time.Hour, Time.Minute);
                 }
-               
-                
+                              
                 return rm.GetDefaultReminder;
                 
             } 

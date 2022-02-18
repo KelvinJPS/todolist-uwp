@@ -255,31 +255,35 @@ namespace uwp_to_do_list
         }
 
         
-        private void CheckedPriority()
+        private void CheckPriority()
         {
-            switch (task.Priority)
+            if((task_list.SelectedItem as TaskTodo) != null)
+               
             {
-                case "low":
-                    low.IsChecked = true;
-                    break;
+                switch ((task_list.SelectedItem as TaskTodo).Priority)
+                {
+                    case "low":
+                        low.IsChecked = true;
+                        break;
 
-                case "medium":
-                    medium.IsChecked = true;
-                    break;
+                    case "medium":
+                        medium.IsChecked = true;
+                        break;
 
-                case "high":
-                    high.IsChecked = true;
-                    break;
+                    case "high":
+                        high.IsChecked = true;
+                        break;
 
-                default:
-                    low.IsChecked = false;
-                    medium.IsChecked = false;
-                    high.IsChecked = false;
+                    default:
+                        low.IsChecked = false;
+                        medium.IsChecked = false;
+                        high.IsChecked = false;
 
-                    break;
+                        break;
+                }
+
             }
-
-
+           
         }
 
         private void descriptions_textbox_TextChanged(object sender, TextChangedEventArgs e)
@@ -302,6 +306,14 @@ namespace uwp_to_do_list
         private void task_list_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             TaskForm.Visibility = Visibility.Visible;
+            CheckPriority();
+        }
+
+        private void Proritycheckbox_Checked (object sender, RoutedEventArgs e)
+        {
+            RadioButton RadioB = sender as RadioButton;
+            (task_list.SelectedItem as TaskTodo).Priority = RadioB.Name;
+            (task_list.SelectedItem as TaskTodo).UpdateTask();
         }
     }
 
