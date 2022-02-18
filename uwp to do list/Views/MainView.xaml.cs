@@ -250,8 +250,12 @@ namespace uwp_to_do_list
         private void list_name_TextChanged(object sender, TextChangedEventArgs e)
         {
             TextBox textbox = sender as TextBox;
+            if((task_list.SelectedItem as TaskTodo) != null)
+            {
+                (task_list.SelectedItem as TaskTodo).NameList = textbox.Text;
+                (task_list.SelectedItem as TaskTodo).UpdateTask();
+            }
             
-          
         }
 
         
@@ -289,12 +293,17 @@ namespace uwp_to_do_list
         private void descriptions_textbox_TextChanged(object sender, TextChangedEventArgs e)
         {
             TextBox textbox = sender as TextBox;
-           
+            if ((task_list.SelectedItem as TaskTodo) != null)
+            {
+                (task_list.SelectedItem as TaskTodo).Description = textbox.Text;
+                (task_list.SelectedItem as TaskTodo).UpdateTask();
+            }
+             
         }
 
         private void NameTaskForm_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (NameTaskForm.Text != String.Empty)
+            if ((task_list.SelectedItem as TaskTodo)!= null)
             {
                 (task_list.SelectedItem as TaskTodo).NameTask = NameTaskForm.Text;
                 (task_list.SelectedItem as TaskTodo).UpdateTask();
