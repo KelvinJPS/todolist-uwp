@@ -14,18 +14,22 @@ namespace uwp_to_do_list
         ObservableCollection<TaskTodo> SubTasks = new ObservableCollection<TaskTodo>();
         TaskTodo task = new TaskTodo();
         Func<DateTimeOffset, string> SetDate = (date) => string.Format("{0}-{1}-{2}",  date.Month, date.Day, date.Year);
-        
+     
         public MainView()
         {
-            this.InitializeComponent();     
+            this.InitializeComponent();    
+            //Get the tasks 
             Tasks = task.GetTasks();         
             task_list.ItemsSource = Tasks;
             task_list.SelectedValuePath = "TaskId";
+
+            //Get the subtasks          
+            subtask_list.ItemsSource = SubTasks;
             number_repeat.MaxLength = 3;
             
           
         }
-      
+       
         private void add_Task_textbox_KeyDown(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
         {
             if (e.Key == Windows.System.VirtualKey.Enter)
@@ -190,7 +194,7 @@ namespace uwp_to_do_list
             {
               TaskTodo SubTask = new TaskTodo();
               SubTask.NameTask = SubTask_TexBox.Text;
-              SubTask.ParentTask = task.TaskId; //the value of the task selected
+              SubTask.ParentTask = (task_list.SelectedItem as TaskTodo).TaskId; //the id of the task selected
               SubTask.AddTask(SubTask);
               SubTasks.Add(SubTask);
               SubTask_TexBox.Text = String.Empty;
@@ -316,6 +320,12 @@ namespace uwp_to_do_list
         {
             TaskForm.Visibility = Visibility.Visible;
             CheckPriority();
+            if(task_list.SelectedItem != null)
+            {
+                SubTasks = (task_list.SelectedItem as TaskTodo).GetSubtasks();
+                subtask_list.ItemsSource = SubTasks;
+            }
+            
         }
 
         private void Proritycheckbox_Checked (object sender, RoutedEventArgs e)
