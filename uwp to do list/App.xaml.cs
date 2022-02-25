@@ -1,4 +1,5 @@
 ﻿using System;
+using uwp_to_do_list.Data_access;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
@@ -20,6 +21,12 @@ namespace uwp_to_do_list
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+            TaskSqliteDataAccess taskSqliteDataAccess = new TaskSqliteDataAccess();
+            TasklistSqliteDataAccess tasklistSqliteData = new TasklistSqliteDataAccess();
+
+            taskSqliteDataAccess.InitializeDatabase();
+            tasklistSqliteData.InitializeDatabase();
+
         }
 
         

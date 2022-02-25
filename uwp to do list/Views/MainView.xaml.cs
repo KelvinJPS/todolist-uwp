@@ -5,24 +5,32 @@ using System.Collections.ObjectModel;
 using Microsoft.Toolkit.Uwp.Notifications; // Notifications library
 using System.Linq;
 using Windows.UI.Xaml;
-
+using uwp_to_do_list.Viewmodels;
 namespace uwp_to_do_list
 {
     public sealed partial class MainView : Page
     {
+
         ObservableCollection<TaskTodo> Tasks = new ObservableCollection<TaskTodo>();
         ObservableCollection<TaskTodo> SubTasks = new ObservableCollection<TaskTodo>();
+        ObservableCollection<string>  TasksLists = new ObservableCollection<string>();
+        TaskList Tasklist = new TaskList();
         TaskTodo task = new TaskTodo();
         Func<DateTimeOffset, string> SetDate = (date) => string.Format("{0}-{1}-{2}",  date.Month, date.Day, date.Year);
-     
+ 
         public MainView()
         {
-            this.InitializeComponent();    
+            this.InitializeComponent();  
+            
             //Get the tasks 
             Tasks = task.GetTasks();         
             task_list.ItemsSource = Tasks;
             task_list.SelectedValuePath = "TaskId";
 
+            //Get the list
+            TasksLists = Tasklist.Getlists();
+            ListView_tasklists.ItemsSource = TasksLists;
+           
             //Get the subtasks          
             subtask_list.ItemsSource = SubTasks;
             number_repeat.MaxLength = 3;
@@ -322,10 +330,9 @@ namespace uwp_to_do_list
             CheckPriority();
             if(task_list.SelectedItem != null)
             {
-                SubTasks = (task_list.SelectedItem as TaskTodo).GetSubtasks();
+                SubTasks = (task_list.SelectedItem as TaskTodo).GetSubtasks(task_list.SelectedItem as TaskTodo);
                 subtask_list.ItemsSource = SubTasks;
-            }
-            
+            }          
         }
 
         private void Proritycheckbox_Checked (object sender, RoutedEventArgs e)
@@ -333,6 +340,17 @@ namespace uwp_to_do_list
             RadioButton RadioB = sender as RadioButton;
             (task_list.SelectedItem as TaskTodo).Priority = RadioB.Name;
             (task_list.SelectedItem as TaskTodo).UpdateTask();
+        }
+
+        private void Add_list_texbox_KeyDown(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
+        {
+            if(e.Key == Windows.System.VirtualKey.Enter)
+            {
+                TasksLists.Add(Add_list_texbox.Text);
+                
+                Tasklist.AddList(Add_list_texbox.Text);
+               
+            }
         }
     }
 

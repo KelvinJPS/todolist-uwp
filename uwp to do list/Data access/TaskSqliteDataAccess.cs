@@ -1,12 +1,13 @@
 ﻿using Microsoft.Data.Sqlite;
 using System;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using Windows.Storage;
 
 namespace uwp_to_do_list
 {
-    public class sqliteControler
+    public class TaskSqliteDataAccess
     {
         public async void InitializeDatabase()
         {
@@ -19,16 +20,17 @@ namespace uwp_to_do_list
 
                 String tableCommand = "CREATE TABLE IF NOT " +
                     "EXISTS Task (Primary_Key INTEGER PRIMARY KEY, " +
-                    "Name_task NVARCHAR(50) NULL,due_date NVARCHAR(10), reminder datetime, priority NVARCHAR(10), list NVARCHAR(50),description text)";
+                    "Name_task NVARCHAR(100) ,due_date NVARCHAR(10), reminder datetime, priority NVARCHAR(10), list NVARCHAR(50),description text, parent_task int, Next_rep datetime)";
 
                 SqliteCommand createTable = new SqliteCommand(tableCommand, db);
 
                 createTable.ExecuteReader();
-
+            
             }
+
         }
 
-        public static void AddData(TaskTodo Task)
+        public  void AddTaskDB(TaskTodo Task)
         {
             try
             {
@@ -43,15 +45,15 @@ namespace uwp_to_do_list
                     insertCommand.Connection = db;
 
                     // Use parameterized query to prevent SQL injection attacks
-                    insertCommand.CommandText = "INSERT INTO Task VALUES (NULL, @NameTask,@DueDate,@Reminder,@Priority,@List,@description,@NextRep,@ParentTask);";
+                    insertCommand.CommandText = "INSERT INTO Task VALUES (NULL, @NameTask,@DueDate,@Reminder,@Priority,@List,@description,@ParentTask,@NextRep);";
                     insertCommand.Parameters.AddWithValue("@NameTask", Task.NameTask);
                     insertCommand.Parameters.AddWithValue("@DueDate", Task.Date);
                     insertCommand.Parameters.AddWithValue("@Reminder", Task.Reminder);
                     insertCommand.Parameters.AddWithValue("@Priority", Task.Priority);
                     insertCommand.Parameters.AddWithValue("@List", Task.NameList);
                     insertCommand.Parameters.AddWithValue("@description", Task.Description);
-                    insertCommand.Parameters.AddWithValue("@NextRep", Task.NextRep);
                     insertCommand.Parameters.AddWithValue("@ParentTask", Task.ParentTask);
+                    insertCommand.Parameters.AddWithValue("@NextRep", Task.NextRep);
                     insertCommand.ExecuteReader();
                     db.Close();
                 }
@@ -91,14 +93,106 @@ namespace uwp_to_do_list
                     Debug.WriteLine(ex.Message);
                 }
 
-
+                  
 
             }
 
         }
 
-    }
-}
+        public ObservableCollection<TaskTodo> GetTaskDB()
+        {
+            var Tasks = new ObservableCollection<TaskTodo>();
+            //get data from sqlite3
+            string dbpath = Path.Combine(ApplicationData.Current.LocalFolder.Path, "TasksSqlite.db");
+            using (SqliteConnection db =
+               new SqliteConnection($"Filename={dbpath}"))
+            {
+                db.Open();
+
+                SqliteCommand selectCommand = new SqliteCommand
+                    ("SELECT * from Task where parent_task = -1", db);
+
+                SqliteDataReader query = selectCommand.ExecuteReader();
+
+                while (query.Read())
+                {
+                    try
+                    {
+                        TaskTodo taskTodo = new TaskTodo();
+                        taskTodo.TaskId = query.GetInt32(0);
+                        taskTodo.NameTask = query.GetString(1);
+                        taskTodo.Date = query.GetString(2);
+                        taskTodo.Reminder = query.GetString(3);
+                        taskTodo.Priority = query.GetString(4);
+                        taskTodo.NameList = query.GetString(5);
+                        taskTodo.Description = query.GetString(6);
+
+                        Tasks.Add(taskTodo);
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine(ex.Message);
+                    }
+                }
+                db.Close();
+            }
+            return Tasks;
+
+        }
+
+
+        public ObservableCollection<TaskTodo> GetSubtasks(TaskTodo taskTodo)
+        {
+
+            {
+                var SubTasks = new ObservableCollection<TaskTodo>();
+  
+                //get data from sqlite3
+
+                string dbpath = Path.Combine(ApplicationData.Current.LocalFolder.Path, "TasksSqlite.db");
+                using (SqliteConnection db =
+                   new SqliteConnection($"Filename={dbpath}"))
+                {
+                    db.Open();
+
+                    SqliteCommand selectCommand = new SqliteCommand
+                        ("SELECT * from Task where parent_task = @Id", db);
+
+                    selectCommand.Parameters.AddWithValue("@Id", taskTodo.TaskId);
+
+                    SqliteDataReader query = selectCommand.ExecuteReader();
+
+                    while (query.Read())
+                    {
+                        try
+                        {
+                       
+                            taskTodo.TaskId = query.GetInt32(0);
+                            taskTodo.NameTask = query.GetString(1);
+                            taskTodo.Date = query.GetString(2);
+                            taskTodo.Reminder = query.GetString(3);
+                            taskTodo.Priority = query.GetString(4);
+                            taskTodo.NameList = query.GetString(5);
+                            taskTodo.Description = query.GetString(6);
+
+                            SubTasks.Add(taskTodo);
+                        }
+                        catch (Exception ex)
+                        {
+                            Debug.WriteLine(ex.Message);
+                        }
+                    }
+                    db.Close();
+                }
+                return SubTasks;
+            }
+        }
+
+
+
+    } }
+    
+
 
 
 

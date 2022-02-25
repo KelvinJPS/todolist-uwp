@@ -30,6 +30,7 @@ namespace uwp_to_do_list
   
         Resource_Manager rm = new Resource_Manager();
         public event PropertyChangedEventHandler PropertyChanged;
+        TaskSqliteDataAccess TaskSqlite = new TaskSqliteDataAccess();
 
         private void NotifyPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
@@ -87,7 +88,6 @@ namespace uwp_to_do_list
                 
             } 
         }
-
         public string FormatDateReminder
         {
             get
@@ -104,105 +104,13 @@ namespace uwp_to_do_list
 
             }
         }
-
-        public ObservableCollection<TaskTodo> GetTasks()
-        {
-            var Tasks = new ObservableCollection<TaskTodo>();
-            //get data from sqlite3
-            string dbpath = Path.Combine(ApplicationData.Current.LocalFolder.Path, "TasksSqlite.db");
-            using (SqliteConnection db =
-               new SqliteConnection($"Filename={dbpath}"))
-            {
-                db.Open();
-
-                SqliteCommand selectCommand = new SqliteCommand
-                    ("SELECT * from Task where parent_task = -1", db);
-
-                SqliteDataReader query = selectCommand.ExecuteReader();
-
-                while (query.Read())
-                {
-                    try
-                    {
-                        TaskTodo taskTodo = new TaskTodo();
-                        taskTodo.TaskId   =  query.GetInt32(0);
-                        taskTodo.NameTask =  query.GetString(1);
-                        taskTodo.Date    =   query.GetString(2);
-                        taskTodo.Reminder =  query.GetString(3);
-                        taskTodo.Priority =  query.GetString(4);
-                        taskTodo.NameList =  query.GetString(5);
-                        taskTodo.Description = query.GetString(6);    
-                        
-                        Tasks.Add(taskTodo);
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.WriteLine(ex.Message);
-                    }                    
-                }
-                db.Close();
-            }
-            return Tasks;
-        }
-
-       public void AddTask(TaskTodo task)
-        {
-            sqliteControler sqliteControler = new sqliteControler();
-            sqliteControler.InitializeDatabase();
-            sqliteControler.AddData(task);                           
-        }
-        public void UpdateTask()
-        {
-           
-            sqliteControler sqliteControler = new sqliteControler();
-            sqliteControler.UpdateData(TaskId, NameTask, Date, Reminder, Priority, NameList, Description, NextRep);
-        }
-  
-
-        public ObservableCollection<TaskTodo> GetSubtasks()
-        {
-            
-            {
-                var SubTasks = new ObservableCollection<TaskTodo>();
-                //get data from sqlite3
-                string dbpath = Path.Combine(ApplicationData.Current.LocalFolder.Path, "TasksSqlite.db");
-                using (SqliteConnection db =
-                   new SqliteConnection($"Filename={dbpath}"))
-                {
-                    db.Open();
-
-                    SqliteCommand selectCommand = new SqliteCommand
-                        ("SELECT * from Task where parent_task = @Id", db);
-                     
-                    selectCommand.Parameters.AddWithValue("@Id",TaskId);
-
-                    SqliteDataReader query = selectCommand.ExecuteReader();
-
-                    while (query.Read())
-                    {
-                        try
-                        {
-                            TaskTodo taskTodo = new TaskTodo();
-                            taskTodo.TaskId = query.GetInt32(0);
-                            taskTodo.NameTask = query.GetString(1);
-                            taskTodo.Date = query.GetString(2);
-                            taskTodo.Reminder = query.GetString(3);
-                            taskTodo.Priority = query.GetString(4);
-                            taskTodo.NameList = query.GetString(5);
-                            taskTodo.Description = query.GetString(6);
-
-                            SubTasks.Add(taskTodo);
-                        }
-                        catch (Exception ex)
-                        {
-                            Debug.WriteLine(ex.Message);
-                        }
-                    }
-                    db.Close();
-                }
-                return SubTasks;
-            }
-        }       
+        public ObservableCollection<TaskTodo> GetTasks() => TaskSqlite.GetTaskDB();
+     
+        public void AddTask(TaskTodo task) => TaskSqlite.AddTaskDB(task); 
+   
+        public void UpdateTask() => TaskSqlite.UpdateData(TaskId, NameTask, Date, Reminder, Priority, NameList, Description, NextRep);
+      
+        public ObservableCollection<TaskTodo> GetSubtasks(TaskTodo taskTodo) => TaskSqlite.GetSubtasks(taskTodo);
     }   
 }
 

@@ -127,9 +127,11 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Data acess\sqliteControler.cs" />
+    <Compile Include="Data access\TasklistSqliteDataAccess.cs" />
+    <Compile Include="Data access\TaskSqliteDataAccess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Data acess\Resource_Manager.cs" />
+    <Compile Include="Data access\Resource_Manager.cs" />
+    <Compile Include="Viewmodels\TaskList.cs" />
     <Compile Include="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
