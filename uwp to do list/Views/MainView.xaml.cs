@@ -26,7 +26,8 @@ namespace uwp_to_do_list
             Tasks = task.GetTasks();         
             task_list.ItemsSource = Tasks;
             task_list.SelectedValuePath = "TaskId";
-
+       
+           
             //Get the list
             TasksLists = Tasklist.Getlists();
             ListView_tasklists.ItemsSource = TasksLists;
@@ -319,7 +320,10 @@ namespace uwp_to_do_list
             {
                 (task_list.SelectedItem as TaskTodo).NameTask = NameTaskForm.Text;
                 (task_list.SelectedItem as TaskTodo).UpdateTask();
+
+               
             }
+
             
         }
    
@@ -351,6 +355,11 @@ namespace uwp_to_do_list
                 Tasklist.AddList(Add_list_texbox.Text);
                
             }
+        }
+
+        private void NameTaskForm_LostFocus(object sender, RoutedEventArgs e)
+        {
+           
         }
     }
 

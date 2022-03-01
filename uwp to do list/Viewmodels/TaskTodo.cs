@@ -35,8 +35,12 @@ namespace uwp_to_do_list
         private void NotifyPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
         public int TaskId { get { return _Id; }  set { _Id = value; NotifyPropertyChanged(TaskId.ToString()); } }
-        public string NameTask { get { return _NameTask; } set { _NameTask = value; NotifyPropertyChanged(NameTask); } }
-        public string Reminder { get { return _Reminder; } set { _Reminder = value; NotifyPropertyChanged(FormatDateReminder); } }
+        public string NameTask { get { return _NameTask; } set { _NameTask = value; NotifyPropertyChanged(nameof(NameTask)); } }
+        public string Reminder { get { return _Reminder; } set { _Reminder = value; 
+                NotifyPropertyChanged(nameof(FormatDateReminder));
+                NotifyPropertyChanged(nameof(FormatTimeReminder));
+            
+            } }
         public string NameList {  
             get 
             {
@@ -47,11 +51,11 @@ namespace uwp_to_do_list
                 return _NameList;
 
                 }
-            set { _NameList = value; NotifyPropertyChanged(NameList); }
+            set { _NameList = value; NotifyPropertyChanged(nameof(NameList)); }
         }
    
            
-        public string Date { get { return _Date ; } set { _Date = value; NotifyPropertyChanged(FormatDate); } }
+        public string Date { get { return _Date ; } set { _Date = value; NotifyPropertyChanged(nameof(FormatDate)); } }
         public string FormatDate
         {
             get
@@ -69,10 +73,10 @@ namespace uwp_to_do_list
             }
              
     }
-        public string Priority { get { return _Priority; } set { _Priority = value; NotifyPropertyChanged(Priority); } }
-        public string Description { get { return _Description;  } set { _Description = value; NotifyPropertyChanged(Description); } } 
-        public DateTimeOffset NextRep { get { return _NextRep; } set { _NextRep= value; NotifyPropertyChanged(NextRep.ToString()); } }      
-        public int  ParentTask { get { return _ParentTask; } set { _ParentTask = value; NotifyPropertyChanged(TaskId.ToString()); } }      
+        public string Priority { get { return _Priority; } set { _Priority = value; NotifyPropertyChanged(nameof(Priority)); } }
+        public string Description { get { return _Description;  } set { _Description = value; NotifyPropertyChanged(nameof(Description)); } } 
+        public DateTimeOffset NextRep { get { return _NextRep; } set { _NextRep= value; NotifyPropertyChanged(nameof(NextRep)); } }      
+        public int  ParentTask { get { return _ParentTask; } set { _ParentTask = value; NotifyPropertyChanged(nameof(TaskId)); } }      
         public string FormatTimeReminder
         {
             get {
