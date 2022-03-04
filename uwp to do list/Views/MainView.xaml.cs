@@ -18,12 +18,13 @@ namespace uwp_to_do_list
         TaskTodo task = new TaskTodo();
         Func<DateTimeOffset, string> SetDate = (date) => string.Format("{0}-{1}-{2}",  date.Month, date.Day, date.Year);
  
+
         public MainView()
         {
             this.InitializeComponent();  
             
             //Get the tasks 
-            Tasks = task.GetTasks();         
+            Tasks= task.GetTasks();         
             task_list.ItemsSource = Tasks;
             task_list.SelectedValuePath = "TaskId";
        
@@ -31,7 +32,11 @@ namespace uwp_to_do_list
             //Get the list
             TasksLists = Tasklist.Getlists();
             ListView_tasklists.ItemsSource = TasksLists;
-           
+
+            //Select the list by default
+            ListView_defaultlists.SelectedItem = Today;
+
+
             //Get the subtasks          
             subtask_list.ItemsSource = SubTasks;
             number_repeat.MaxLength = 3;
@@ -45,8 +50,17 @@ namespace uwp_to_do_list
             {
 
                 TaskTodo Task = new TaskTodo();
-                //add task to de database and the observable collection
+              
                 Task.NameTask = add_Task_textbox.Text;
+
+                //Set the NameList with the list selected
+                if (ListView_defaultlists.SelectedItem != null)
+                    Task.NameList = (ListView_defaultlists.SelectedItem as ListViewItem).Name;
+
+                if( ListView_tasklists.SelectedItem != null)                    
+                    Task.NameList = (ListView_tasklists.SelectedItem as ListViewItem).Name;
+
+                //add task to de database and the observable collection
                 Task.AddTask(Task);
                 Tasks.Add(Task);
                 //update the observable collection 
