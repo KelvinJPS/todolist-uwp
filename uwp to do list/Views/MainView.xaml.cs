@@ -13,11 +13,11 @@ namespace uwp_to_do_list
 
         ObservableCollection<TaskTodo> Tasks = new ObservableCollection<TaskTodo>();
         ObservableCollection<TaskTodo> SubTasks = new ObservableCollection<TaskTodo>();
-        ObservableCollection<string>  TasksLists = new ObservableCollection<string>();
+        ObservableCollection<string> TasksLists = new ObservableCollection<string>();
         TaskList Tasklist = new TaskList();
         TaskTodo task = new TaskTodo();
-        Func<DateTimeOffset, string> SetDate = (date) => string.Format("{0}-{1}-{2}",  date.Month, date.Day, date.Year);
- 
+        Func<DateTimeOffset, string> SetDate = (date) => string.Format("{0}-{1}-{2}", date.Month, date.Day, date.Year);
+
 
         public MainView()
         {
@@ -30,16 +30,16 @@ namespace uwp_to_do_list
             ListView_tasklists.ItemsSource = TasksLists;
 
             //Get the tasks 
-            Tasks = task.GetTasks(GetListSelected());         
+            Tasks = task.GetTasks(GetListSelected());
             task_list.ItemsSource = Tasks;
             task_list.SelectedValuePath = "TaskId";
-       
+
             //Get the subtasks          
             subtask_list.ItemsSource = SubTasks;
             number_repeat.MaxLength = 3;
-                    
+
         }
-       
+
         private string GetListSelected()
         {
 
@@ -51,9 +51,9 @@ namespace uwp_to_do_list
 
             if (ListView_tasklists.SelectedItem != null)
             {
-                return ListView_tasklists.SelectedItem.ToString();;
+                return ListView_tasklists.SelectedItem.ToString(); ;
             }
-             
+
             return string.Empty;
         }
         private void add_Task_textbox_KeyDown(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
@@ -69,18 +69,18 @@ namespace uwp_to_do_list
                 //add task to de database and the observable collection
                 Task.AddTask(Task);
                 Tasks.Add(Task);
-             
+
                 //update the observable collection 
                 Tasks = task.GetTasks(GetListSelected());
                 task_list.ItemsSource = Tasks;
                 //select the new task 
-                task_list.SelectedItem = Task;              
+                task_list.SelectedItem = Task;
                 //clean the texbox and focus
                 add_Task_textbox.Text = String.Empty;
-                add_Task_textbox.Focus(Windows.UI.Xaml.FocusState.Keyboard);                          
+                add_Task_textbox.Focus(Windows.UI.Xaml.FocusState.Keyboard);
 
             }
-            
+
         }
         private void add_Task_textbox_LostFocus(object sender, Windows.UI.Xaml.RoutedEventArgs e) => add_Task_textbox.Text = string.Empty;
 
@@ -89,7 +89,7 @@ namespace uwp_to_do_list
             calendar_popup.IsOpen = true;
             calendar_date.SelectedDates.Add(DateTimeOffset.Now);
         }
-          
+
         private void quit_TaskForm_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e) => TaskForm.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
 
         private void cancel_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
@@ -100,13 +100,20 @@ namespace uwp_to_do_list
 
         private void save_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-             calendar_popup.IsOpen = false;
-             (task_list.SelectedItem as TaskTodo).Date = SetDate(calendar_date.SelectedDates[0]);
-             (task_list.SelectedItem as TaskTodo).UpdateTask();
-             calendar_date.SelectedDates.Clear();
-                
+            calendar_popup.IsOpen = false;
+            (task_list.SelectedItem as TaskTodo).Date = SetDate(calendar_date.SelectedDates[0]);
+            (task_list.SelectedItem as TaskTodo).UpdateTask();
+            calendar_date.SelectedDates.Clear();
+
         }
-        private void reminder_cancel_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e) => reminder_popup.IsOpen = false;
+        private void reminder_cancel_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e) 
+        {
+            reminder_popup.IsOpen = false;
+            reminder_calendar.SelectedDates.Clear();
+            reminder_time_picker.SelectedTime = null;
+        }
+        
+      
 
 
         private void reminder_save_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
