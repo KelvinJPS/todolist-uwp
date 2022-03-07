@@ -41,7 +41,7 @@ namespace uwp_to_do_list
                 NotifyPropertyChanged(nameof(FormatTimeReminder));
             
             } }
-        public string NameList {  
+        public string ListName {  
             get 
             {
                 if ( _NameList == string.Empty || _NameList == null)
@@ -51,7 +51,7 @@ namespace uwp_to_do_list
                 return _NameList;
 
                 }
-            set { _NameList = value; NotifyPropertyChanged(nameof(NameList)); }
+            set { _NameList = value; NotifyPropertyChanged(nameof(ListName)); }
         }
    
            
@@ -108,11 +108,11 @@ namespace uwp_to_do_list
 
             }
         }
-        public ObservableCollection<TaskTodo> GetTasks() => TaskSqlite.GetTaskDB();
+        public ObservableCollection<TaskTodo> GetTasks( string ListSelected) => TaskSqlite.GetTaskDB(ListSelected);
      
         public void AddTask(TaskTodo task) => TaskSqlite.AddTaskDB(task); 
    
-        public void UpdateTask() => TaskSqlite.UpdateData(TaskId, NameTask, Date, Reminder, Priority, NameList, Description, NextRep);
+        public void UpdateTask() => TaskSqlite.UpdateData(TaskId, NameTask, Date, Reminder, Priority, ListName, Description, NextRep);
       
         public ObservableCollection<TaskTodo> GetSubtasks(TaskTodo taskTodo) => TaskSqlite.GetSubtasks(taskTodo);
     }   

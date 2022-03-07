@@ -78,8 +78,8 @@ namespace uwp_to_do_list.Data_access
                     insertCommand.Connection = db;
 
                     // Use parameterized query to prevent SQL injection attacks
-                    insertCommand.CommandText = "INSERT INTO List VALUES (NULL,@NameList );";
-                    insertCommand.Parameters.AddWithValue("@NameList", NameList);
+                    insertCommand.CommandText = "INSERT INTO List VALUES (NULL,@ListName );";
+                    insertCommand.Parameters.AddWithValue("@ListName", NameList);
                     insertCommand.ExecuteReader();
                     db.Close();
                 }

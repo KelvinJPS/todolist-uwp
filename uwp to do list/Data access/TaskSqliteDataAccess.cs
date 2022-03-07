@@ -50,7 +50,7 @@ namespace uwp_to_do_list
                     insertCommand.Parameters.AddWithValue("@DueDate", Task.Date);
                     insertCommand.Parameters.AddWithValue("@Reminder", Task.Reminder);
                     insertCommand.Parameters.AddWithValue("@Priority", Task.Priority);
-                    insertCommand.Parameters.AddWithValue("@List", Task.NameList);
+                    insertCommand.Parameters.AddWithValue("@List", Task.ListName);
                     insertCommand.Parameters.AddWithValue("@description", Task.Description);
                     insertCommand.Parameters.AddWithValue("@ParentTask", Task.ParentTask);
                     insertCommand.Parameters.AddWithValue("@NextRep", Task.NextRep);
@@ -99,7 +99,7 @@ namespace uwp_to_do_list
 
         }
 
-        public ObservableCollection<TaskTodo> GetTaskDB()
+        public ObservableCollection<TaskTodo> GetTaskDB(string ListName )
         {
             var Tasks = new ObservableCollection<TaskTodo>();
             //get data from sqlite3
@@ -110,7 +110,9 @@ namespace uwp_to_do_list
                 db.Open();
 
                 SqliteCommand selectCommand = new SqliteCommand
-                    ("SELECT * from Task where parent_task = -1", db);
+                    ("SELECT * from Task where list  = @ListName", db);
+
+                selectCommand.Parameters.AddWithValue("ListName", ListName);
 
                 SqliteDataReader query = selectCommand.ExecuteReader();
 
@@ -124,7 +126,7 @@ namespace uwp_to_do_list
                         taskTodo.Date = query.GetString(2);
                         taskTodo.Reminder = query.GetString(3);
                         taskTodo.Priority = query.GetString(4);
-                        taskTodo.NameList = query.GetString(5);
+                        taskTodo.ListName = query.GetString(5);
                         taskTodo.Description = query.GetString(6);
 
                         Tasks.Add(taskTodo);
@@ -172,7 +174,7 @@ namespace uwp_to_do_list
                             taskTodo.Date = query.GetString(2);
                             taskTodo.Reminder = query.GetString(3);
                             taskTodo.Priority = query.GetString(4);
-                            taskTodo.NameList = query.GetString(5);
+                            taskTodo.ListName = query.GetString(5);
                             taskTodo.Description = query.GetString(6);
 
                             SubTasks.Add(taskTodo);
