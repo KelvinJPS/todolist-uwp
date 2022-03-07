@@ -66,6 +66,17 @@ namespace uwp_to_do_list
                 Task.NameTask = add_Task_textbox.Text;
                 Task.ListName = GetListSelected();
 
+                //Add due date to today or tomorrow 
+                if (Task.ListName == "Today")
+                {
+                    Task.Date = DateTimeOffset.Now.ToString();
+                }
+                    
+                else if (Task.ListName == "Tomorrow")
+                {
+                    Task.Date = DateTimeOffset.Now.AddDays(1).ToString();
+                }
+
                 //add task to de database and the observable collection
                 Task.AddTask(Task);
                 Tasks.Add(Task);
