@@ -63,7 +63,7 @@ namespace uwp_to_do_list
                 Debug.WriteLine(ex.ToString());
             }
         }
-        public void UpdateData(int Id, string NameTask, string Date, string Reminder, string Priority, string NameList, string Description,DateTimeOffset NextRep)
+        public void UpdateData(int Id, string NameTask, DateTimeOffset Date, DateTimeOffset Reminder, string Priority, string NameList, string Description,DateTimeOffset NextRep)
         {
             string dbpath = Path.Combine(ApplicationData.Current.LocalFolder.Path, "TasksSqlite.db");
             using (SqliteConnection db =
@@ -121,10 +121,10 @@ namespace uwp_to_do_list
                     try
                     {
                         TaskTodo taskTodo = new TaskTodo();
-                        taskTodo.TaskId = query.GetInt32(0);
+                        taskTodo.TaskId =   query.GetInt32(0);
                         taskTodo.NameTask = query.GetString(1);
-                        taskTodo.Date = query.GetString(2);
-                        taskTodo.Reminder = query.GetString(3);
+                        taskTodo.Date =     query.GetDateTimeOffset(2);
+                        taskTodo.Reminder = query.GetDateTimeOffset(3);
                         taskTodo.Priority = query.GetString(4);
                         taskTodo.ListName = query.GetString(5);
                         taskTodo.Description = query.GetString(6);
@@ -169,10 +169,10 @@ namespace uwp_to_do_list
                         try
                         {
                        
-                            taskTodo.TaskId = query.GetInt32(0);
+                            taskTodo.TaskId   = query.GetInt32(0);
                             taskTodo.NameTask = query.GetString(1);
-                            taskTodo.Date = query.GetString(2);
-                            taskTodo.Reminder = query.GetString(3);
+                            taskTodo.Date     = query.GetDateTimeOffset(2);
+                            taskTodo.Reminder = query.GetDateTimeOffset(3);
                             taskTodo.Priority = query.GetString(4);
                             taskTodo.ListName = query.GetString(5);
                             taskTodo.Description = query.GetString(6);

@@ -69,12 +69,12 @@ namespace uwp_to_do_list
                 //Add due date to today or tomorrow 
                 if (Task.ListName == "Today")
                 {
-                    Task.Date = DateTimeOffset.Now.ToString();
+                    Task.Date = DateTimeOffset.Now;
                 }
                     
                 else if (Task.ListName == "Tomorrow")
                 {
-                    Task.Date = DateTimeOffset.Now.AddDays(1).ToString();
+                    Task.Date = DateTimeOffset.Now.AddDays(1);
                 }
 
                 //add task to de database and the observable collection
@@ -98,7 +98,12 @@ namespace uwp_to_do_list
         private void calendar_button(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             calendar_popup.IsOpen = true;
-            calendar_date.SelectedDates.Add(DateTimeOffset.Now);
+            if ((task_list.SelectedItem as TaskTodo).Date == default)
+            {
+                calendar_date.SelectedDates.Add(DateTimeOffset.Now);
+            }
+            else
+                calendar_date.SelectedDates.Add((task_list.SelectedItem as TaskTodo).Date);
         }
 
         private void quit_TaskForm_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e) => TaskForm.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
@@ -112,7 +117,7 @@ namespace uwp_to_do_list
         private void save_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             calendar_popup.IsOpen = false;
-            (task_list.SelectedItem as TaskTodo).Date = SetDate(calendar_date.SelectedDates[0]);
+            (task_list.SelectedItem as TaskTodo).Date = calendar_date.SelectedDates[0];
             (task_list.SelectedItem as TaskTodo).UpdateTask();
             calendar_date.SelectedDates.Clear();
 
@@ -124,8 +129,6 @@ namespace uwp_to_do_list
             reminder_time_picker.SelectedTime = null;
         }
         
-      
-
 
         private void reminder_save_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
@@ -140,8 +143,7 @@ namespace uwp_to_do_list
             }
 
             SheduleNotification(Date);
-            (task_list.SelectedItem as TaskTodo).Reminder = string.Format("{0}-{1}-{2} {3}:{4}:{5}", Date.Month, Date.Day, Date.Year, Date.Hour, Date.Minute, Date.Second);
-            //update in DB
+            (task_list.SelectedItem as TaskTodo).Reminder = Date;
             //clear values
             reminder_calendar.SelectedDates.Clear();
             reminder_time_picker.SelectedTime = null;

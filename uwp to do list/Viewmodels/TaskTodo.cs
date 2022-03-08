@@ -12,15 +12,15 @@ namespace uwp_to_do_list
 {
     public class TaskTodo : INotifyPropertyChanged
     {
-        private string _NameTask, _Reminder, _Date, _Priority, _NameList, _Description;
+        private string _NameTask, _Priority, _NameList, _Description;
         private int _Id, _ParentTask;
-        
-        private DateTimeOffset _NextRep;
+
+        private DateTimeOffset _NextRep, _Date, _Reminder;
         public TaskTodo()
         {        
           _NameTask =   String.Empty;
-          _Reminder  =  String.Empty;
-          _Date =       String.Empty;
+          _Reminder  =  default;
+            _Date =     default;
           _Priority  =  String.Empty;
           _NameList  =  String.Empty;
           _Description = String.Empty;
@@ -36,7 +36,7 @@ namespace uwp_to_do_list
 
         public int TaskId { get { return _Id; }  set { _Id = value; NotifyPropertyChanged(TaskId.ToString()); } }
         public string NameTask { get { return _NameTask; } set { _NameTask = value; NotifyPropertyChanged(nameof(NameTask)); } }
-        public string Reminder { get { return _Reminder; } set { _Reminder = value; 
+        public DateTimeOffset Reminder { get { return _Reminder; } set { _Reminder = value; 
                 NotifyPropertyChanged(nameof(FormatDateReminder));
                 NotifyPropertyChanged(nameof(FormatTimeReminder));
             
@@ -55,23 +55,20 @@ namespace uwp_to_do_list
         }
    
            
-        public string Date { get { return _Date ; } set { _Date = value; NotifyPropertyChanged(nameof(FormatDate)); } }
+        public DateTimeOffset Date { get { return _Date ; } set { _Date = value; 
+                           NotifyPropertyChanged(nameof(FormatDate)); } }
         public string FormatDate
         {
             get
             {
-                var cultureInfo = new CultureInfo("en-US");
-                DateTimeOffset DueDate;
-                
-                if (Date != string.Empty && Date != null)
-                {
-                    DueDate = DateTimeOffset.Parse(Date, cultureInfo);
-                    return String.Format(" {0},{1} {2}", DueDate.DayOfWeek, DueDate.Day, DueDate.ToString("MMM"));
-                }
-                else                   
-                    return rm.GetDefaultDate;             
+                if (Date == default)
+                    return rm.GetDefaultDate;
+
+                return String.Format(" {0},{1} {2}", Date.DayOfWeek, Date.Day, Date.ToString("MMM"));
             }
-             
+                      
+                          
+               
     }
         public string Priority { get { return _Priority; } set { _Priority = value; NotifyPropertyChanged(nameof(Priority)); } }
         public string Description { get { return _Description;  } set { _Description = value; NotifyPropertyChanged(nameof(Description)); } } 
@@ -80,33 +77,20 @@ namespace uwp_to_do_list
         public string FormatTimeReminder
         {
             get {
-                DateTime Time;
-                var cultureInfo = new CultureInfo("en-US");
-                if ( Reminder != string.Empty && Reminder !=  null )
-                {
-                    Time = DateTime.Parse (Reminder, cultureInfo);
-                    return string.Format(" Remind me at {0}:{1}", Time.Hour, Time.Minute);
-                }
+                if (Reminder == default)
+                    return rm.GetDefaultReminder;
+
+                return string.Format(" Remind me at {0}:{1}", Reminder.Hour, Reminder.Minute);
+                
                               
-                return rm.GetDefaultReminder;
+               ;
                 
             } 
         }
         public string FormatDateReminder
         {
-            get
-            {
-                DateTimeOffset Date;
-
-                if(DateTimeOffset.TryParse(_Reminder, out Date) == true)
-                {
-                    return string.Format(" {0},{1} {2}", Date.DayOfWeek, Date.Day, Date.ToString("MMM"));
-
-                }
-
-                return Reminder;
-
-            }
+            get =>  string.Format(" {0},{1} {2}", Date.DayOfWeek, Date.Day, Date.ToString("MMM"));
+      
         }
         public ObservableCollection<TaskTodo> GetTasks( string ListSelected) => TaskSqlite.GetTaskDB(ListSelected);
      
