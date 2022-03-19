@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using uwp_to_do_list.Data_access;
+using uwp_to_do_list;
 
 namespace uwp_to_do_list.Viewmodels
 {
@@ -13,6 +14,7 @@ namespace uwp_to_do_list.Viewmodels
         TasklistSqliteDataAccess tasklistSqlite = new TasklistSqliteDataAccess();
         public ObservableCollection<string> Getlists() => tasklistSqlite.GetListsDB();
         public void AddList(string NameList) => tasklistSqlite.AddList(NameList);
-     
+
+        public string listSelected { get; set; }
     }
 }

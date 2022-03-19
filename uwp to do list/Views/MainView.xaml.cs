@@ -6,6 +6,7 @@ using Microsoft.Toolkit.Uwp.Notifications; // Notifications library
 using System.Linq;
 using Windows.UI.Xaml;
 using uwp_to_do_list.Viewmodels;
+
 namespace uwp_to_do_list
 {
     public sealed partial class MainView : Page
@@ -17,13 +18,14 @@ namespace uwp_to_do_list
         TaskList Tasklist = new TaskList();
         TaskTodo task = new TaskTodo();
         Func<DateTimeOffset, string> SetDate = (date) => string.Format("{0}-{1}-{2}", date.Month, date.Day, date.Year);
-
+       
 
         public MainView()
         {
             this.InitializeComponent();
             //Select the list by default
             ListView_defaultlists.SelectedItem = Today;
+            
 
             //Get the list
             TasksLists = Tasklist.Getlists();
@@ -55,6 +57,11 @@ namespace uwp_to_do_list
             }
 
             return string.Empty;
+        }
+
+        private void ChangeItemColor()
+        {
+           
         }
         private void add_Task_textbox_KeyDown(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
         {
@@ -396,11 +403,19 @@ namespace uwp_to_do_list
         }
 
 
-        private void ListView_tasklists_SelectionChanged(object sender, SelectionChangedEventArgs e) 
-            => task_list.ItemsSource = task.GetTasks(GetListSelected());
+        private void ListView_tasklists_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        { 
+            task_list.ItemsSource = task.GetTasks(GetListSelected());
+            task_list.Header = GetListSelected();
+            
+        }
 
-        private void ListView_defaultlists_SelectionChanged(object sender, SelectionChangedEventArgs e) 
-            => task_list.ItemsSource = task.GetTasks(GetListSelected());
+
+        private void ListView_defaultlists_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            task_list.ItemsSource = task.GetTasks(GetListSelected());
+            task_list.Header = GetListSelected();
+        }
 
         private void ListView_defaultlists_ItemClick(object sender, ItemClickEventArgs e)
         {
