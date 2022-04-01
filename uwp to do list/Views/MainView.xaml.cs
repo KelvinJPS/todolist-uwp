@@ -6,7 +6,7 @@ using Microsoft.Toolkit.Uwp.Notifications; // Notifications library
 using System.Linq;
 using Windows.UI.Xaml;
 using uwp_to_do_list.Viewmodels;
-
+using FontAwesome.UWP;
 namespace uwp_to_do_list
 {
     public sealed partial class MainView : Page
@@ -18,27 +18,29 @@ namespace uwp_to_do_list
         TaskList Tasklist = new TaskList();
         TaskTodo task = new TaskTodo();
         Func<DateTimeOffset, string> SetDate = (date) => string.Format("{0}-{1}-{2}", date.Month, date.Day, date.Year);
-       
+
+
 
         public MainView()
         {
             this.InitializeComponent();
             //Select the list by default
             ListView_defaultlists.SelectedItem = Today;
-            
 
             //Get the list
             TasksLists = Tasklist.Getlists();
             ListView_tasklists.ItemsSource = TasksLists;
 
             //Get the tasks 
-            Tasks = task.GetTasks(GetListSelected());
+            Tasks = task.GetTodayTasks();
             task_list.ItemsSource = Tasks;
             task_list.SelectedValuePath = "TaskId";
 
             //Get the subtasks          
             subtask_list.ItemsSource = SubTasks;
             number_repeat.MaxLength = 3;
+
+
 
         }
 
@@ -59,10 +61,7 @@ namespace uwp_to_do_list
             return string.Empty;
         }
 
-        private void ChangeItemColor()
-        {
-           
-        }
+
         private void add_Task_textbox_KeyDown(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
         {
             if (e.Key == Windows.System.VirtualKey.Enter)
@@ -78,7 +77,7 @@ namespace uwp_to_do_list
                 {
                     Task.Date = DateTimeOffset.Now;
                 }
-                    
+
                 else if (Task.ListName == "Tomorrow")
                 {
                     Task.Date = DateTimeOffset.Now.AddDays(1);
@@ -129,13 +128,13 @@ namespace uwp_to_do_list
             calendar_date.SelectedDates.Clear();
 
         }
-        private void reminder_cancel_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e) 
+        private void reminder_cancel_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             reminder_popup.IsOpen = false;
             reminder_calendar.SelectedDates.Clear();
             reminder_time_picker.SelectedTime = null;
         }
-        
+
 
         private void reminder_save_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
@@ -155,17 +154,17 @@ namespace uwp_to_do_list
             reminder_calendar.SelectedDates.Clear();
             reminder_time_picker.SelectedTime = null;
         }
-            
-            private void priority_checkbox_click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+
+        private void priority_checkbox_click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             RadioButton radioButton = sender as RadioButton;
             task.Priority = radioButton.Name;
-         
+
         }
-   
+
         private void reminder_button_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            reminder_popup.IsOpen = true;     
+            reminder_popup.IsOpen = true;
             reminder_calendar.SelectedDates.Add(DateTimeOffset.Now);
 
         }
@@ -184,7 +183,7 @@ namespace uwp_to_do_list
 
         }
 
-      
+
 
         private void repeat_button_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
@@ -199,23 +198,23 @@ namespace uwp_to_do_list
         private void number_repeat_BeforeTextChanging(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
         {
             // only numbers in textbox
-            args.Cancel = args.NewText.Any(c => !char.IsNumber(c));         
+            args.Cancel = args.NewText.Any(c => !char.IsNumber(c));
         }
 
         private void cancel_repeat_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e) => custom_repeat_popup.IsOpen = false;
 
         private void save_repeat_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            custom_repeat_popup.IsOpen = false; 
-              
-           
+            custom_repeat_popup.IsOpen = false;
+
+
         }
 
         private void custom_repeat_combobox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {  
+        {
             ComboBox ComboBox = sender as ComboBox;
             ComboBoxItem ComboBoxSelected = ComboBox.SelectedItem as ComboBoxItem;
-           
+
             if (ComboBoxSelected != null)
             {
                 custom_month_calendar.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
@@ -224,17 +223,17 @@ namespace uwp_to_do_list
                 switch (ComboBoxSelected.Name)
                 {
                     case "MonthsComboBox":
-                       
+
                         custom_month_calendar.Visibility = Windows.UI.Xaml.Visibility.Visible;
 
                         break;
 
                     case "DaysComboBox":
-                        
-                        break ;
+
+                        break;
 
                     case "WeeksComboBox":
-            
+
                         week_calendar.Visibility = Windows.UI.Xaml.Visibility.Visible;
 
                         break;
@@ -243,30 +242,30 @@ namespace uwp_to_do_list
         }
         private void GridView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            
+
         }
 
         private void SubTask_KeyDown(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
         {
             if (e.Key == Windows.System.VirtualKey.Enter)
             {
-              TaskTodo SubTask = new TaskTodo();
-              SubTask.NameTask = SubTask_TexBox.Text;
-              SubTask.ParentTask = (task_list.SelectedItem as TaskTodo).TaskId; //the id of the task selected
-              SubTask.AddTask(SubTask);
-              SubTasks.Add(SubTask);
-              SubTask_TexBox.Text = String.Empty;
-              
+                TaskTodo SubTask = new TaskTodo();
+                SubTask.NameTask = SubTask_TexBox.Text;
+                SubTask.ParentTask = (task_list.SelectedItem as TaskTodo).TaskId; //the id of the task selected
+                SubTask.AddTask(SubTask);
+                SubTasks.Add(SubTask);
+                SubTask_TexBox.Text = String.Empty;
+
             }
         }
 
-        public bool CheckTaskRepeat(DateTimeOffset date) =>  date==DateTime.Today;
+        public bool CheckTaskRepeat(DateTimeOffset date) => date == DateTime.Today;
 
-        
+
         private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            TextBlock TextBlockSelected = Repeat_options.SelectedItem  as TextBlock;
-    
+            TextBlock TextBlockSelected = Repeat_options.SelectedItem as TextBlock;
+
             if (TextBlockSelected != null)
             {
                 switch (TextBlockSelected.Name)
@@ -281,28 +280,28 @@ namespace uwp_to_do_list
                     case "Daily":
 
                         task.NextRep = DateTime.Today.AddDays(1);
-                       
+
                         break;
 
 
                     case "Weekly":
 
                         task.NextRep = DateTime.Today.AddDays(7);
-                       
+
                         break;
 
 
                     case "Montly":
 
                         task.NextRep = DateTime.Today.AddMonths(1);
-                        
-                       
+
+
                         break;
 
                     case "Yearly":
 
                         task.NextRep = DateTime.Today.AddYears(1);
-                       
+
 
                         break;
                 }
@@ -312,19 +311,19 @@ namespace uwp_to_do_list
         private void list_name_TextChanged(object sender, TextChangedEventArgs e)
         {
             TextBox textbox = sender as TextBox;
-            if((task_list.SelectedItem as TaskTodo) != null)
+            if ((task_list.SelectedItem as TaskTodo) != null)
             {
                 (task_list.SelectedItem as TaskTodo).ListName = textbox.Text;
                 (task_list.SelectedItem as TaskTodo).UpdateTask();
             }
-            
+
         }
 
-        
+
         private void CheckPriority()
         {
-            if((task_list.SelectedItem as TaskTodo) != null)
-               
+            if ((task_list.SelectedItem as TaskTodo) != null)
+
             {
                 switch ((task_list.SelectedItem as TaskTodo).Priority)
                 {
@@ -349,7 +348,7 @@ namespace uwp_to_do_list
                 }
 
             }
-           
+
         }
 
         private void descriptions_textbox_TextChanged(object sender, TextChangedEventArgs e)
@@ -360,20 +359,20 @@ namespace uwp_to_do_list
                 (task_list.SelectedItem as TaskTodo).Description = textbox.Text;
                 (task_list.SelectedItem as TaskTodo).UpdateTask();
             }
-             
+
         }
 
         private void NameTaskForm_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if ((task_list.SelectedItem as TaskTodo)!= null)
+            if ((task_list.SelectedItem as TaskTodo) != null)
             {
                 (task_list.SelectedItem as TaskTodo).NameTask = NameTaskForm.Text;
-                (task_list.SelectedItem as TaskTodo).UpdateTask();              
-            }            
+                (task_list.SelectedItem as TaskTodo).UpdateTask();
+            }
         }
-      
 
-        private void Proritycheckbox_Checked (object sender, RoutedEventArgs e)
+
+        private void Proritycheckbox_Checked(object sender, RoutedEventArgs e)
         {
             RadioButton RadioB = sender as RadioButton;
             (task_list.SelectedItem as TaskTodo).Priority = RadioB.Name;
@@ -382,12 +381,12 @@ namespace uwp_to_do_list
 
         private void Add_list_texbox_KeyDown(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
         {
-            if(e.Key == Windows.System.VirtualKey.Enter)
+            if (e.Key == Windows.System.VirtualKey.Enter)
             {
                 TasksLists.Add(Add_list_texbox.Text);
-                
+
                 Tasklist.AddList(Add_list_texbox.Text);
-               
+
             }
         }
 
@@ -404,24 +403,33 @@ namespace uwp_to_do_list
 
 
         private void ListView_tasklists_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        { 
-            task_list.ItemsSource = task.GetTasks(GetListSelected());
-            task_list.Header = GetListSelected();
-            
-        }
-
-
-        private void ListView_defaultlists_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             task_list.ItemsSource = task.GetTasks(GetListSelected());
             task_list.Header = GetListSelected();
+          
+
+        }
+        private void ListView_defaultlists_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            
+            task_list.Header = GetListSelected();
+            if (GetListSelected() == "Today")
+            {
+                
+                task_list.ItemsSource = task.GetTodayTasks();
+            }
+            else
+            {               
+                task_list.ItemsSource = task.GetTasks(GetListSelected());
+
+            }
         }
 
         private void ListView_defaultlists_ItemClick(object sender, ItemClickEventArgs e)
         {
             ListView_tasklists.SelectedItem = null;
             TaskForm.Visibility = Visibility.Collapsed;
-            
+
         }
 
         private void ListView_tasklists_ItemClick(object sender, ItemClickEventArgs e)
@@ -429,7 +437,20 @@ namespace uwp_to_do_list
             ListView_defaultlists.SelectedItem = null;
             TaskForm.Visibility = Visibility.Collapsed;
         }
-    }
 
-  }
+        private void Play_task_Click(object sender, RoutedEventArgs e)
+        {
+            Button Button = sender as Button;
+            Button.Content = FontAwesomeIcon.Pause;
+        }
+        private void Circle_Checked(object sender, RoutedEventArgs e)
+        {
+            var button = (RadioButton)sender;
+            var item = (TaskTodo)button.DataContext;
+            item.Done = "True";
+            item.UpdateTask();
+            Tasks.Remove(item);
+        }
+    }
+}
 

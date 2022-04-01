@@ -20,7 +20,7 @@ namespace uwp_to_do_list
 
                 String tableCommand = "CREATE TABLE IF NOT " +
                     "EXISTS Task (Primary_Key INTEGER PRIMARY KEY, " +
-                    "Name_task NVARCHAR(100) ,due_date NVARCHAR(10), reminder datetime, priority NVARCHAR(10), list NVARCHAR(50),description text, parent_task int, Next_rep datetime)";
+                    "Name_task NVARCHAR(100) ,due_date NVARCHAR(10), reminder datetime, priority NVARCHAR(10), list NVARCHAR(50),description text, parent_task int, Next_rep datetime, Done NVARCHAR(5))";
 
                 SqliteCommand createTable = new SqliteCommand(tableCommand, db);
 
@@ -45,7 +45,7 @@ namespace uwp_to_do_list
                     insertCommand.Connection = db;
 
                     // Use parameterized query to prevent SQL injection attacks
-                    insertCommand.CommandText = "INSERT INTO Task VALUES (NULL, @NameTask,@DueDate,@Reminder,@Priority,@List,@description,@ParentTask,@NextRep);";
+                    insertCommand.CommandText = "INSERT INTO Task VALUES (NULL, @NameTask,@DueDate,@Reminder,@Priority,@List,@description,@ParentTask,@NextRep,@Done);";
                     insertCommand.Parameters.AddWithValue("@NameTask", Task.NameTask);
                     insertCommand.Parameters.AddWithValue("@DueDate", Task.Date);
                     insertCommand.Parameters.AddWithValue("@Reminder", Task.Reminder);
@@ -54,6 +54,8 @@ namespace uwp_to_do_list
                     insertCommand.Parameters.AddWithValue("@description", Task.Description);
                     insertCommand.Parameters.AddWithValue("@ParentTask", Task.ParentTask);
                     insertCommand.Parameters.AddWithValue("@NextRep", Task.NextRep);
+                    insertCommand.Parameters.AddWithValue("@Done", Task.Done);
+
                     insertCommand.ExecuteReader();
                     db.Close();
                 }
@@ -63,7 +65,8 @@ namespace uwp_to_do_list
                 Debug.WriteLine(ex.ToString());
             }
         }
-        public void UpdateData(int Id, string NameTask, DateTimeOffset Date, DateTimeOffset Reminder, string Priority, string NameList, string Description,DateTimeOffset NextRep)
+        public void UpdateData(int Id, string NameTask, DateTimeOffset Date, DateTimeOffset Reminder, string Priority, string NameList, 
+            string Description,DateTimeOffset NextRep, string Done)
         {
             string dbpath = Path.Combine(ApplicationData.Current.LocalFolder.Path, "TasksSqlite.db");
             using (SqliteConnection db =
@@ -75,7 +78,8 @@ namespace uwp_to_do_list
                 updateCommand.Connection = db;
                 try
                 {
-                    updateCommand.CommandText = "update Task set Name_task = @NameTask, due_date = @DueDate, reminder = @Reminder, priority = @Priority, list = @List, description = @Description, next_rep = @NextRep" +
+                    updateCommand.CommandText = "update Task set Name_task = @NameTask, due_date = @DueDate, reminder = @Reminder, priority = @Priority, list = @List, description = @Description, " +
+                        "next_rep = @NextRep, Done = @Done" +
                         " where Primary_Key = @ID";
                     updateCommand.Parameters.AddWithValue("@DueDate", Date);
                     updateCommand.Parameters.AddWithValue("@ID", Id);
@@ -85,6 +89,7 @@ namespace uwp_to_do_list
                     updateCommand.Parameters.AddWithValue("@List", NameList);
                     updateCommand.Parameters.AddWithValue("@Description", Description);
                     updateCommand.Parameters.AddWithValue("@NextRep", NextRep);
+                    updateCommand.Parameters.AddWithValue("@Done", Done);
                     updateCommand.ExecuteReader();
                     db.Close();
                 }
@@ -99,7 +104,8 @@ namespace uwp_to_do_list
 
         }
 
-        public ObservableCollection<TaskTodo> GetTaskDB(string ListName )
+        
+        public ObservableCollection<TaskTodo> GetTasksDB(string ListName )
         {
             var Tasks = new ObservableCollection<TaskTodo>();
             //get data from sqlite3
@@ -110,7 +116,7 @@ namespace uwp_to_do_list
                 db.Open();
 
                 SqliteCommand selectCommand = new SqliteCommand
-                    ("SELECT * from Task where list  = @ListName", db);
+                    ("SELECT * from Task where list  = @ListName AND Done != 'True' ", db);
 
                 selectCommand.Parameters.AddWithValue("ListName", ListName);
 
@@ -128,6 +134,8 @@ namespace uwp_to_do_list
                         taskTodo.Priority = query.GetString(4);
                         taskTodo.ListName = query.GetString(5);
                         taskTodo.Description = query.GetString(6);
+                        taskTodo.Done = query.GetString(7);
+
 
                         Tasks.Add(taskTodo);
                     }
@@ -142,11 +150,54 @@ namespace uwp_to_do_list
 
         }
 
+        public ObservableCollection<TaskTodo> GetAllTasksDB()
+        {
+            var Tasks = new ObservableCollection<TaskTodo>();
+            //get data from sqlite3
+            string dbpath = Path.Combine(ApplicationData.Current.LocalFolder.Path, "TasksSqlite.db");
+            using (SqliteConnection db =
+               new SqliteConnection($"Filename={dbpath}"))
+            {
+                db.Open();
+
+                SqliteCommand selectCommand = new SqliteCommand
+                    ("SELECT * from Task where Done != 'True'", db);
+
+
+                SqliteDataReader query = selectCommand.ExecuteReader();
+
+                while (query.Read())
+                {
+                    try
+                    {
+                        TaskTodo taskTodo = new TaskTodo();
+                        taskTodo.TaskId = query.GetInt32(0);
+                        taskTodo.NameTask = query.GetString(1);
+                        taskTodo.Date = query.GetDateTimeOffset(2);
+                        taskTodo.Reminder = query.GetDateTimeOffset(3);
+                        taskTodo.Priority = query.GetString(4);
+                        taskTodo.ListName = query.GetString(5);
+                        taskTodo.Description = query.GetString(6);
+                        taskTodo.Done = query.GetString(7);
+
+
+                        Tasks.Add(taskTodo);
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine(ex.Message);
+                    }
+                }
+                db.Close();
+            }
+            return Tasks;
+
+        }
 
         public ObservableCollection<TaskTodo> GetSubtasks(TaskTodo taskTodo)
         {
 
-            {
+            
                 var SubTasks = new ObservableCollection<TaskTodo>();
   
                 //get data from sqlite3
@@ -187,9 +238,48 @@ namespace uwp_to_do_list
                     db.Close();
                 }
                 return SubTasks;
-            }
         }
 
+        public ObservableCollection<TaskTodo> GetTasksDone()
+        {
+            var TasksDone = new ObservableCollection<TaskTodo>();
+            TaskTodo taskTodo = new TaskTodo();
+            //get data from sqlite3
+
+            string dbpath = Path.Combine(ApplicationData.Current.LocalFolder.Path, "TasksSqlite.db");
+            using (SqliteConnection db =
+               new SqliteConnection($"Filename={dbpath}"))
+            {
+                db.Open();
+
+                SqliteCommand selectCommand = new SqliteCommand
+                    ("SELECT * from Task", db);
+     
+               SqliteDataReader query = selectCommand.ExecuteReader();
+
+                while (query.Read())
+                {
+                    try
+                    {
+                        taskTodo.TaskId = query.GetInt32(0);
+                        taskTodo.NameTask = query.GetString(1);
+                        taskTodo.Date = query.GetDateTimeOffset(2);
+                        taskTodo.Reminder = query.GetDateTimeOffset(3);
+                        taskTodo.Priority = query.GetString(4);
+                        taskTodo.ListName = query.GetString(5);
+                        taskTodo.Description = query.GetString(6);
+                        TasksDone.Add(taskTodo);
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine(ex.Message);
+                    }
+                }
+                db.Close();
+            }
+            return TasksDone;
+
+        }
 
 
     } }

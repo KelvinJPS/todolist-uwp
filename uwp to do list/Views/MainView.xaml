@@ -4,35 +4,15 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:local="using:uwp_to_do_list"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:fa="using:FontAwesome.UWP" xmlns:viewmodels="using:uwp_to_do_list.Viewmodels"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:fa="using:FontAwesome.UWP" xmlns:viewmodels="using:uwp_to_do_list.Viewmodels" 
     mc:Ignorable="d"
    Background="#08090A"  
- 
 	>
-	<Page.Resources>
-		<Style x:Key="TextBoxStyle1" TargetType="TextBox">
-			<Setter Property="Template">
-				<Setter.Value>
-					<ControlTemplate TargetType="TextBox">
-						<Grid>
-							<Border x:Name="BorderElement" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Control.IsTemplateFocusTarget="True"/>
-							<ScrollViewer x:Name="ContentElement" AutomationProperties.AccessibilityView="Raw" HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}" HorizontalScrollMode="{TemplateBinding ScrollViewer.HorizontalScrollMode}" IsDeferredScrollingEnabled="{TemplateBinding ScrollViewer.IsDeferredScrollingEnabled}" IsTabStop="False" IsVerticalRailEnabled="{TemplateBinding ScrollViewer.IsVerticalRailEnabled}" IsHorizontalRailEnabled="{TemplateBinding ScrollViewer.IsHorizontalRailEnabled}" Margin="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}" VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}" VerticalScrollMode="{TemplateBinding ScrollViewer.VerticalScrollMode}" ZoomMode="Disabled"/>
-							<TextBlock x:Name="PlaceholderTextContentPresenter" Foreground="{Binding PlaceholderForeground, RelativeSource={RelativeSource Mode=TemplatedParent}, TargetNullValue={ThemeResource TextControlPlaceholderForeground}}" IsHitTestVisible="False" Margin="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}" TextAlignment="{TemplateBinding TextAlignment}" TextWrapping="{TemplateBinding TextWrapping}" Text="{TemplateBinding PlaceholderText}"/>
-						</Grid>
-					</ControlTemplate>
-				</Setter.Value>
-			</Setter>
-		</Style>
-		<ControlTemplate x:Key="CalendarViewTemplate1" TargetType="CalendarView">
-		   
-		</ControlTemplate>
-	  
-	</Page.Resources>
+    <Page.Resources>
 
+    </Page.Resources>
 
- 
-
-	<Grid>
+    <Grid>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="auto"></ColumnDefinition>
 			<ColumnDefinition Width="auto"></ColumnDefinition>
@@ -51,10 +31,10 @@
             <ListView Name="ListView_defaultlists" SelectionChanged="ListView_defaultlists_SelectionChanged" 
                       IsItemClickEnabled="True" ItemClick="ListView_defaultlists_ItemClick"> 
 
-                <ListViewItem Name="Today">
+                <ListViewItem  Name="Today">
                     <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
 
-                        <fa:FontAwesome Icon="CalendarCheckOutline" FontSize="20" Foreground="Fuchsia" Margin="0,0,10,0"></fa:FontAwesome>
+                        <fa:FontAwesome Icon="CalendarCheckOutline" FontSize="20" Foreground="Fuchsia" Margin="0,0,10,0" ></fa:FontAwesome>
                         <TextBlock Text="today" Foreground="White" FontSize="20"></TextBlock>
 
                     </StackPanel>
@@ -82,19 +62,17 @@
                 </ListViewItem>
 
                 <ListViewItem Name="TasksTodo">
-                    
+
                     <StackPanel Orientation="Horizontal">
 
                         <fa:FontAwesome Icon="Home" FontSize="20" Foreground="Fuchsia" Margin="0,0,10,0" ></fa:FontAwesome>
                         <TextBlock Text="tasks" Foreground="White" FontSize="20"></TextBlock>
 
                     </StackPanel>
-                    
-                </ListViewItem >
-               
-			    
-            </ListView>
 
+                </ListViewItem >
+                
+            </ListView>
             <ListView Name="ListView_tasklists" SelectionChanged="ListView_tasklists_SelectionChanged"
                       IsItemClickEnabled="True" ItemClick="ListView_tasklists_ItemClick">
 
@@ -106,7 +84,7 @@
                         </StackPanel>
                     </DataTemplate>
                </ListView.ItemTemplate>
-   
+       
             </ListView>
 
         </StackPanel>
@@ -118,7 +96,8 @@
                  PlaceholderText="+ add a task" 
                  Background="#04000E" Foreground="White" Height="40" Width="1000" Style="{StaticResource TextBoxStyle1}" />
 
-		<ListView x:Name="task_list" ItemClick="task_list_ItemClick" IsItemClickEnabled="True" Grid.Row="0" Grid.Column="1"  Background="Transparent"
+        
+        <ListView x:Name="task_list" ItemClick="task_list_ItemClick" IsItemClickEnabled="True" Grid.Row="0" Grid.Column="1"  Background="Transparent"
                   Padding="15" Margin="25,0,0,0" >
 
             <ListView.HeaderTemplate>
@@ -130,17 +109,24 @@
             <ListView.ItemTemplate>
 
                 <DataTemplate x:DataType="local:TaskTodo">
-                    
+
                     <RelativePanel >
-                        <RadioButton Name="Circle" RelativePanel.AlignLeftWithPanel="True"></RadioButton>
-                        <TextBlock   Foreground ="White" Text="{Binding NameTask}"
+                        <RadioButton  Name="Circle"  RelativePanel.AlignLeftWithPanel="True"
+                                      Style="{StaticResource RadioButtonStyle1}"
+                                      Checked="Circle_Checked">
+                        </RadioButton>
+                        <TextBlock Foreground ="White" Text="{Binding NameTask}"
                             RelativePanel.RightOf="Circle"/>
-                        <fa:FontAwesome MinWidth="100" Name="Play" Icon="Play" Foreground="Fuchsia" 
-                                        RelativePanel.AlignRightWithPanel="True" />
+
+                        <Button Name="Play_task" Background="Transparent"
+                                RelativePanel.AlignRightWithPanel="True" BorderThickness="0" 
+                                Click="Play_task_Click">
+                            <fa:FontAwesome Name="Play" Icon="Play" Foreground="Fuchsia"/>
+                        </Button>
                     </RelativePanel>
-                    
+                   
                 </DataTemplate>
-			</ListView.ItemTemplate>
+            </ListView.ItemTemplate>
 
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
@@ -150,8 +136,8 @@
                 </Style>
             </ListView.ItemContainerStyle>
         </ListView>
-
-		<StackPanel Name="TaskForm"  Grid.Column="2" Width="340" Background="#04000E" HorizontalAlignment="Right" Visibility="Collapsed" >
+   
+        <StackPanel Name="TaskForm"  Grid.Column="2" Width="340" Background="#04000E" HorizontalAlignment="Right" Visibility="Collapsed" >
 			<Button FontSize="20" Name="quit_TaskForm" Content="x" Click="quit_TaskForm_Click" HorizontalAlignment="Right" Background="Transparent"></Button>
 
 			<TextBox Name="NameTaskForm" HorizontalAlignment="Center" FontSize="20" 
