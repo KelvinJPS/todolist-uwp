@@ -418,6 +418,11 @@ namespace uwp_to_do_list
                 
                 task_list.ItemsSource = task.GetTodayTasks();
             }
+            else if(GetListSelected() == "Tomorrow")
+            {
+                task_list.ItemsSource = task.GetTomorrowTasks();
+            }
+
             else
             {               
                 task_list.ItemsSource = task.GetTasks(GetListSelected());

@@ -150,8 +150,27 @@ namespace uwp_to_do_list
             }
             return tasks;
         }
+
+        public ObservableCollection<TaskTodo> GetTomorrowTasks()
+        {
+            ObservableCollection<TaskTodo> Tasks = TaskSqlite.GetAllTasksDB();
+            ObservableCollection<TaskTodo> TomorrowTasks = new ObservableCollection<TaskTodo>();
+            
+            if(Tasks.Count > 0)
+            {
+                foreach (TaskTodo task in Tasks)
+                {
+                    if (task.Date.ToString("d") == DateTimeOffset.Now.AddDays(1).ToString("d"))
+                    {
+                        TomorrowTasks.Add(task);
+                    }
+
+                }
+            }
+           
+            return TomorrowTasks;
+        }
     }
     }   
-
 
 
