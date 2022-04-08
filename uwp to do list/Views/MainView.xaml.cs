@@ -404,7 +404,8 @@ namespace uwp_to_do_list
 
         private void ListView_tasklists_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            task_list.ItemsSource = task.GetTasks(GetListSelected());
+            Tasks = task.GetTasks(GetListSelected());
+            task_list.ItemsSource = Tasks;
             task_list.Header = GetListSelected();
           
 
@@ -415,20 +416,23 @@ namespace uwp_to_do_list
             task_list.Header = GetListSelected();
             if (GetListSelected() == "Today")
             {
-                
-                task_list.ItemsSource = task.GetTodayTasks();
+                Tasks = task.GetTodayTasks();
+                task_list.ItemsSource = Tasks;
             }
             else if(GetListSelected() == "Tomorrow")
             {
-                task_list.ItemsSource = task.GetTomorrowTasks();
+                Tasks = task.GetTomorrowTasks();
+                task_list.ItemsSource = Tasks;
             }
             else if (GetListSelected() == "Planned")
             {
-                task_list.ItemsSource = task.GetPlannedTasks();
+                Tasks = task.GetPlannedTasks();
+                task_list.ItemsSource = Tasks;
             }
             else
             {               
-                task_list.ItemsSource = task.GetTasks(GetListSelected());
+               Tasks = task.GetTasks(GetListSelected());
+               task_list.ItemsSource = Tasks;
 
             }
         }
