@@ -422,7 +422,10 @@ namespace uwp_to_do_list
             {
                 task_list.ItemsSource = task.GetTomorrowTasks();
             }
-
+            else if (GetListSelected() == "Planned")
+            {
+                task_list.ItemsSource = task.GetPlannedTasks();
+            }
             else
             {               
                 task_list.ItemsSource = task.GetTasks(GetListSelected());

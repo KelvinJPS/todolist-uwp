@@ -50,12 +50,12 @@
                     </StackPanel>
                 </ListViewItem>
 
-                <ListViewItem Name="Planning">
+                <ListViewItem Name="Planned">
 
                     <StackPanel Orientation="Horizontal">
 
                         <fa:FontAwesome Icon="Calendar"  FontSize="20" Foreground="Fuchsia" Margin="0,0,10,0"></fa:FontAwesome>
-                        <TextBlock Text="planning" Foreground="White" FontSize="20"></TextBlock>
+                        <TextBlock Text="planned" Foreground="White" FontSize="20"></TextBlock>
 
                     </StackPanel>
 
