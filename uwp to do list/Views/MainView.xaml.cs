@@ -414,8 +414,7 @@ namespace uwp_to_do_list
         private void ListView_defaultlists_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             
-            task_list.Header = GetListSelected();
-             ListViewItem ListItem = ListView_defaultlists.SelectedItem as ListViewItem;
+            ListViewItem ListItem = ListView_defaultlists.SelectedItem as ListViewItem;
 
             if (ListItem !=null)
             {
@@ -424,23 +423,32 @@ namespace uwp_to_do_list
                 switch (ListItem.Name)
                 {
                     case "Today":
+
                         TasksTodo = task.GetTodayTasks();
                         task_list.ItemsSource = TasksTodo;
+                        task_list.Header = "Today";
+
                         break;
 
                     case "Tomorrow":
                         TasksTodo = task.GetTomorrowTasks();
                         task_list.ItemsSource = TasksTodo;
+                        task_list.Header = "Tomorrow";
+
                         break;
 
                     case "Planned":
                         TasksTodo = task.GetPlannedTasks();
                         task_list.ItemsSource = TasksTodo;
+                        task_list.Header = "Planned";
+
                         break;
 
                     default:
                         TasksTodo = task.GetTasks(GetListSelected());
                         task_list.ItemsSource = TasksTodo;
+                        task_list.Header = "Tasks";
+
                         break;
                 }
 
