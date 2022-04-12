@@ -12,7 +12,7 @@ namespace uwp_to_do_list
     public sealed partial class MainView : Page
     {
 
-        ObservableCollection<TaskTodo> Tasks = new ObservableCollection<TaskTodo>();
+        ObservableCollection<TaskTodo> TasksTodo = new ObservableCollection<TaskTodo>();
         ObservableCollection<TaskTodo> SubTasks = new ObservableCollection<TaskTodo>();
         ObservableCollection<string> TasksLists = new ObservableCollection<string>();
         TaskList Tasklist = new TaskList();
@@ -32,8 +32,8 @@ namespace uwp_to_do_list
             ListView_tasklists.ItemsSource = TasksLists;
 
             //Get the tasks 
-            Tasks = task.GetTodayTasks();
-            task_list.ItemsSource = Tasks;
+            TasksTodo = task.GetTodayTasks();
+            task_list.ItemsSource = TasksTodo;
             task_list.SelectedValuePath = "TaskId";
 
             //Get the subtasks          
@@ -49,7 +49,8 @@ namespace uwp_to_do_list
 
             if (ListView_defaultlists.SelectedItem != null)
             {
-                return (ListView_defaultlists.SelectedItem as ListViewItem).Name;
+                return "Tasks";
+                
 
             }
 
@@ -85,11 +86,11 @@ namespace uwp_to_do_list
 
                 //add task to de database and the observable collection
                 Task.AddTask(Task);
-                Tasks.Add(Task);
+                TasksTodo.Add(Task);
 
                 //update the observable collection 
-                Tasks = task.GetTasks(GetListSelected());
-                task_list.ItemsSource = Tasks;
+                TasksTodo = task.GetTasks(GetListSelected());
+                task_list.ItemsSource = TasksTodo;
                 //select the new task 
                 task_list.SelectedItem = Task;
                 //clean the texbox and focus
@@ -404,8 +405,8 @@ namespace uwp_to_do_list
 
         private void ListView_tasklists_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Tasks = task.GetTasks(GetListSelected());
-            task_list.ItemsSource = Tasks;
+            TasksTodo = task.GetTasks(GetListSelected());
+            task_list.ItemsSource = TasksTodo;
             task_list.Header = GetListSelected();
           
 
@@ -414,27 +415,37 @@ namespace uwp_to_do_list
         {
             
             task_list.Header = GetListSelected();
-            if (GetListSelected() == "Today")
+             ListViewItem ListItem = ListView_defaultlists.SelectedItem as ListViewItem;
+
+            if (ListItem !=null)
             {
-                Tasks = task.GetTodayTasks();
-                task_list.ItemsSource = Tasks;
-            }
-            else if(GetListSelected() == "Tomorrow")
-            {
-                Tasks = task.GetTomorrowTasks();
-                task_list.ItemsSource = Tasks;
-            }
-            else if (GetListSelected() == "Planned")
-            {
-                Tasks = task.GetPlannedTasks();
-                task_list.ItemsSource = Tasks;
-            }
-            else
-            {               
-               Tasks = task.GetTasks(GetListSelected());
-               task_list.ItemsSource = Tasks;
+
+
+                switch (ListItem.Name)
+                {
+                    case "Today":
+                        TasksTodo = task.GetTodayTasks();
+                        task_list.ItemsSource = TasksTodo;
+                        break;
+
+                    case "Tomorrow":
+                        TasksTodo = task.GetTomorrowTasks();
+                        task_list.ItemsSource = TasksTodo;
+                        break;
+
+                    case "Planned":
+                        TasksTodo = task.GetPlannedTasks();
+                        task_list.ItemsSource = TasksTodo;
+                        break;
+
+                    default:
+                        TasksTodo = task.GetTasks(GetListSelected());
+                        task_list.ItemsSource = TasksTodo;
+                        break;
+                }
 
             }
+            
         }
 
         private void ListView_defaultlists_ItemClick(object sender, ItemClickEventArgs e)
@@ -461,7 +472,7 @@ namespace uwp_to_do_list
             var item = (TaskTodo)button.DataContext;
             item.Done = "True";
             item.UpdateTask();
-            Tasks.Remove(item);
+            TasksTodo.Remove(item);
         }
     }
 }

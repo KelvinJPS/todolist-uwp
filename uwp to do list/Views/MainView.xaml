@@ -61,7 +61,7 @@
 
                 </ListViewItem>
 
-                <ListViewItem Name="TasksTodo">
+                <ListViewItem Name="Tasks">
 
                     <StackPanel Orientation="Horizontal">
 
