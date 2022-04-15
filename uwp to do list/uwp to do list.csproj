@@ -131,11 +131,11 @@
     <Compile Include="Data access\TaskSqliteDataAccess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Data access\Resource_Manager.cs" />
-    <Compile Include="Viewmodels\TaskList.cs" />
+    <Compile Include="Class\TaskList.cs" />
     <Compile Include="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Viewmodels\TaskTodo.cs" />
+    <Compile Include="Class\TaskTodo.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">

@@ -260,12 +260,27 @@
 					</Grid.ColumnDefinitions>
 
 					<fa:FontAwesome Grid.Column="0" Icon="List" FontSize="20" Foreground="Fuchsia" ></fa:FontAwesome>
-					<TextBox Name="Name_list"  TextChanged="list_name_TextChanged" Grid.Column="1"  BorderThickness="0" BorderBrush="Transparent" Background="Transparent" 
+					<TextBox Name="Name_list"  TextChanged="list_name_TextChanged" 
+                             Grid.Column="1"  BorderThickness="0" BorderBrush="Transparent" Background="Transparent" 
 							 DataContext="{Binding ElementName=task_list, Path=SelectedItem}"
                              Text="{Binding Path=ListName}" 
-                             FontSize="20" Style="{StaticResource TextBoxStyle1}"></TextBox>
+                             FontSize="20" Style="{StaticResource TextBoxStyle1}"
+                             TextChanging="Name_list_TextChanging"
+                             LostFocus="Name_list_LostFocus"
+                             KeyDown="Name_list_KeyDown"
+                             
+                             >
+                             
+                    </TextBox>
 
 				</Grid>
+                <ListBox Name="Lists_listbox" Visibility="Collapsed" Background="#04000E" 
+                         SelectionChanged="Lists_listbox_SelectionChanged"
+                         
+                         
+                       >                  
+
+                </ListBox>
 
 				<Grid Name="repeat_grid">
 					<Grid.ColumnDefinitions>

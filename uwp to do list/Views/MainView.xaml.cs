@@ -30,6 +30,7 @@ namespace uwp_to_do_list
             //Get the list
             TasksLists = Tasklist.Getlists();
             ListView_tasklists.ItemsSource = TasksLists;
+            Lists_listbox.ItemsSource = TasksLists ;
 
             //Get the tasks 
             TasksTodo = task.GetTodayTasks();
@@ -316,7 +317,12 @@ namespace uwp_to_do_list
             {
                 (task_list.SelectedItem as TaskTodo).ListName = textbox.Text;
                 (task_list.SelectedItem as TaskTodo).UpdateTask();
+
+                
+
             }
+         
+
 
         }
 
@@ -481,6 +487,63 @@ namespace uwp_to_do_list
             item.Done = "True";
             item.UpdateTask();
             TasksTodo.Remove(item);
+        }
+
+        private void Name_list_TextChanging(TextBox sender, TextBoxTextChangingEventArgs args)
+        {
+
+           if(sender.FocusState != FocusState.Unfocused)
+            {
+                //Show the lists with the name most similar to the less.
+
+                Lists_listbox.ItemsSource = TasksLists.OrderBy(sender.Text.CompareTo).Take(4);
+                Lists_listbox.Visibility = Visibility.Visible;
+                
+            }
+     
+        }
+
+        private void Lists_listbox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+        //change the text of the listname textbox with the list selected 
+         if(Lists_listbox.SelectedItem != null)
+            {
+                string ListSelected = Lists_listbox.SelectedItem as string;
+                Name_list.Text = ListSelected;
+   
+            }
+    
+        }
+
+        private void Name_list_LostFocus(object sender, RoutedEventArgs e)
+        {
+           //Close the listbox with the lists
+            Lists_listbox.Visibility = Visibility.Collapsed;
+            String ListName = (task_list.SelectedItem as TaskTodo).ListName;
+
+            //Create a new list if it's not made already and the list name it's not empty
+            if (TasksLists.Contains(ListName)==  false && ListName != String.Empty )
+            {
+                TasksLists.Add((task_list.SelectedItem as TaskTodo).ListName);
+                Tasklist.AddList((task_list.SelectedItem as TaskTodo).ListName);
+            }
+        }
+
+        private void Name_list_KeyDown(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
+        {
+            //Close the listbox with the lists
+            Lists_listbox.Visibility = Visibility.Collapsed;
+            String ListName = (task_list.SelectedItem as TaskTodo).ListName;
+            //Create a new list if it's not made already and the list name it's not empty
+
+            if (e.Key == Windows.System.VirtualKey.Enter)
+            {
+                if (TasksLists.Contains(ListName) == false && ListName != String.Empty)
+                {
+                    TasksLists.Add((task_list.SelectedItem as TaskTodo).ListName);
+                    Tasklist.AddList((task_list.SelectedItem as TaskTodo).ListName);
+                }
+            }
         }
     }
 }

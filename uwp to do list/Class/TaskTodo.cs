@@ -52,10 +52,7 @@ namespace uwp_to_do_list
         {
             get
             {
-                if (_NameList == string.Empty || _NameList == null)
-                {
-                    return rm.GetDefaultNamelist;
-                }
+               
                 return _NameList;
 
             }
