@@ -318,20 +318,20 @@ namespace uwp_to_do_list
                 (task_list.SelectedItem as TaskTodo).ListName = textbox.Text;
                 (task_list.SelectedItem as TaskTodo).UpdateTask();
 
-                
-
+              
             }
-         
-
-
+        
         }
-
 
         private void CheckPriority()
         {
             if ((task_list.SelectedItem as TaskTodo) != null)
 
             {
+                low.IsChecked = false;
+                medium.IsChecked = false;
+                high.IsChecked = false;
+
                 switch ((task_list.SelectedItem as TaskTodo).Priority)
                 {
                     case "low":
@@ -399,13 +399,7 @@ namespace uwp_to_do_list
 
         private void task_list_ItemClick(object sender, ItemClickEventArgs e)
         {
-            TaskForm.Visibility = Visibility.Visible;
-            CheckPriority();
-            if (task_list.SelectedItem != null)
-            {
-                SubTasks = (task_list.SelectedItem as TaskTodo).GetSubtasks(task_list.SelectedItem as TaskTodo);
-                subtask_list.ItemsSource = SubTasks;
-            }
+            TaskForm.Visibility = Visibility.Visible;        
         }
 
 
@@ -544,6 +538,11 @@ namespace uwp_to_do_list
                     Tasklist.AddList((task_list.SelectedItem as TaskTodo).ListName);
                 }
             }
+        }
+
+        private void task_list_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            CheckPriority();
         }
     }
 }

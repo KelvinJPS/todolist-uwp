@@ -98,7 +98,7 @@
 
         
         <ListView x:Name="task_list" ItemClick="task_list_ItemClick" IsItemClickEnabled="True" Grid.Row="0" Grid.Column="1"  Background="Transparent"
-                  Padding="15" Margin="25,0,0,0" >
+                  Padding="15" Margin="25,0,0,0" SelectionChanged="task_list_SelectionChanged" >
 
             <ListView.HeaderTemplate>
                 <DataTemplate  x:DataType="x:String">
@@ -413,11 +413,11 @@
 					<fa:FontAwesome Grid.Column="0" Grid.Row="0" Icon="Flag" FontSize="20" Foreground="Fuchsia" ></fa:FontAwesome>
 					<TextBlock Margin="0,0,10,0" Grid.Column="1" Text=" Priority"  FontSize="20"></TextBlock>
 
-					<RadioButton Name="low"    Click="priority_checkbox_click" Grid.Column="2" Checked="Proritycheckbox_Checked" ></RadioButton>
-                    <RadioButton Name="medium" Click="priority_checkbox_click" Grid.Column="4" Checked="Proritycheckbox_Checked"></RadioButton>
-                    <RadioButton Name="high"   Click="priority_checkbox_click" Grid.Column="6" Checked="Proritycheckbox_Checked"></RadioButton>
+                    <RadioButton Name="low"    Click="priority_checkbox_click" Grid.Column="2"  Checked="Proritycheckbox_Checked"  ></RadioButton>
+                    <RadioButton Name="medium" Click="priority_checkbox_click" Grid.Column="4"  Checked="Proritycheckbox_Checked"  ></RadioButton>
+                    <RadioButton Name="high"   Click="priority_checkbox_click" Grid.Column="6"  Checked="Proritycheckbox_Checked" ></RadioButton>
 
-					<fa:FontAwesome Grid.Column="3" Margin="0,0,10,0"  Icon="Flag" FontSize="20" Foreground="Green"  ></fa:FontAwesome>
+					<fa:FontAwesome Grid.Column="3"  Margin="0,0,10,0"  Icon="Flag" FontSize="20" Foreground="Green"  ></fa:FontAwesome>
 					<fa:FontAwesome Grid.Column="5"  Margin="0,0,10,0" Icon="Flag" FontSize="20" Foreground="Yellow"></fa:FontAwesome>
 					<fa:FontAwesome Grid.Column="7"  Margin="0,0,10,0" Icon="Flag" FontSize="20" Foreground="Red" ></fa:FontAwesome>
 
