@@ -100,7 +100,13 @@ namespace uwp_to_do_list
         }
         public string FormatDateReminder
         {
-            get => string.Format(" {0},{1} {2}", Date.DayOfWeek, Date.Day, Date.ToString("MMM"));
+            get 
+
+            {
+                if (Reminder == default)
+                    return " ";
+                return string.Format(" {0},{1} {2}", Reminder.DayOfWeek, Reminder.Day, Reminder.ToString("MMM")); 
+            }
 
         }
         public string Done
