@@ -134,7 +134,7 @@ namespace uwp_to_do_list
 
         public void UpdateTask() => TaskSqlite.UpdateData(TaskId, NameTask, Date, Reminder, Priority, ListName, Description, NextRep, Done);
 
-        public ObservableCollection<TaskTodo> GetSubtasks(TaskTodo taskTodo) => TaskSqlite.GetSubtasks(taskTodo);
+        public ObservableCollection<TaskTodo> GetSubtasks(int Id) => TaskSqlite.GetSubtasks(Id);
 
         public ObservableCollection<TaskTodo> GetTodayTasks()
         {

@@ -426,14 +426,19 @@
 			</StackPanel>
 
 			<TextBlock  Text="Subtasks" FontSize="20" HorizontalAlignment="Center" ></TextBlock>
-			<TextBox HorizontalAlignment="Center" Width="300" Background="Transparent" PlaceholderText="add subtask" KeyDown="SubTask_KeyDown" Style="{StaticResource TextBoxStyle1}" Grid.Column="1" Name="SubTask_TexBox" ></TextBox>
-			
-			<ListView  Name="subtask_list">
+            <TextBox HorizontalAlignment="Center" Width="300" Background="Transparent" PlaceholderText="add subtask" KeyDown="SubTask_KeyDown" Style="{StaticResource TextBoxStyle1}" Grid.Column="1" x:Name="SubTask_TexBox" />
+
+            <ListView  Name="subtask_list">
 
 				<ListView.ItemTemplate>
                     <DataTemplate x:DataType="local:TaskTodo">
-                        <TextBlock Width="100" Foreground="White" Text="{x:Bind NameTask}"  />
-					</DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <RadioButton Name="subtaskdone_radiobutton" 
+                                         Style="{StaticResource RadioButtonStyle1}" 
+                                         Checked="subtaskdone_radiobutton_Checked"></RadioButton>
+                            <TextBlock Width="100" Foreground="White" Text="{x:Bind NameTask}"/>
+                        </StackPanel>
+                    </DataTemplate>
 				</ListView.ItemTemplate>
 
 			</ListView>

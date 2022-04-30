@@ -513,7 +513,13 @@ namespace uwp_to_do_list
         {
            //Close the listbox with the lists
             Lists_listbox.Visibility = Visibility.Collapsed;
-            String ListName = (task_list.SelectedItem as TaskTodo).ListName;
+            string ListName = string.Empty;
+          
+            if(task_list.SelectedItem != null)
+            {
+                 ListName = (task_list.SelectedItem as TaskTodo).ListName;
+            }
+          
 
             //Create a new list if it's not made already and the list name it's not empty
             if (TasksLists.Contains(ListName)==  false && ListName != String.Empty )
@@ -543,6 +549,24 @@ namespace uwp_to_do_list
         private void task_list_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             CheckPriority();
+            int Id = default;
+            if(task_list.SelectedItem != null)
+            {
+                Id = (task_list.SelectedItem as TaskTodo).TaskId;
+            }
+
+            SubTasks = task.GetSubtasks(Id);
+            subtask_list.ItemsSource = SubTasks;
+
+        }
+
+        private void subtaskdone_radiobutton_Checked(object sender, RoutedEventArgs e)
+        {
+            var button = (RadioButton)sender;
+            var item = (TaskTodo)button.DataContext;
+            item.Done = "True";
+            item.UpdateTask();
+            SubTasks.Remove(item);
         }
     }
 }

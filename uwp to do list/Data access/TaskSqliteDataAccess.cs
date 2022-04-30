@@ -194,10 +194,10 @@ namespace uwp_to_do_list
 
         }
 
-        public ObservableCollection<TaskTodo> GetSubtasks(TaskTodo taskTodo)
+        public ObservableCollection<TaskTodo> GetSubtasks(int  Id)
         {
 
-            
+                TaskTodo taskTodo = new TaskTodo();
                 var SubTasks = new ObservableCollection<TaskTodo>();
   
                 //get data from sqlite3
@@ -209,9 +209,9 @@ namespace uwp_to_do_list
                     db.Open();
 
                     SqliteCommand selectCommand = new SqliteCommand
-                        ("SELECT * from Task where parent_task = @Id", db);
+                        ("SELECT * from Task where parent_task = @Id AND Done != 'True' ", db);
 
-                    selectCommand.Parameters.AddWithValue("@Id", taskTodo.TaskId);
+                    selectCommand.Parameters.AddWithValue("@Id", Id);
 
                     SqliteDataReader query = selectCommand.ExecuteReader();
 
