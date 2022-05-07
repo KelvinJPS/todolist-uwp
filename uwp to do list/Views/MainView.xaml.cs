@@ -7,6 +7,8 @@ using System.Linq;
 using Windows.UI.Xaml;
 using uwp_to_do_list.Viewmodels;
 using FontAwesome.UWP;
+using uwp_to_do_list.Views;
+
 namespace uwp_to_do_list
 {
     public sealed partial class MainView : Page
@@ -18,8 +20,7 @@ namespace uwp_to_do_list
         TaskList Tasklist = new TaskList();
         TaskTodo task = new TaskTodo();
         Func<DateTimeOffset, string> SetDate = (date) => string.Format("{0}-{1}-{2}", date.Month, date.Day, date.Year);
-
-
+        
 
         public MainView()
         {
@@ -40,7 +41,6 @@ namespace uwp_to_do_list
             //Get the subtasks          
             subtask_list.ItemsSource = SubTasks;
             number_repeat.MaxLength = 3;
-
 
 
         }
@@ -471,8 +471,8 @@ namespace uwp_to_do_list
 
         private void Play_task_Click(object sender, RoutedEventArgs e)
         {
-            Button Button = sender as Button;
-            Button.Content = FontAwesomeIcon.Pause;
+           
+            this.Frame.Navigate(typeof(Focus_Task));
         }
         private void Circle_Checked(object sender, RoutedEventArgs e)
         {

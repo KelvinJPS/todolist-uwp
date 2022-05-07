@@ -6,7 +6,8 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:fa="using:FontAwesome.UWP" xmlns:viewmodels="using:uwp_to_do_list.Viewmodels" 
     mc:Ignorable="d"
-   Background="#08090A"  
+    xmlns:Interactivity="using:Microsoft.Xaml.Interactivity" xmlns:Core="using:Microsoft.Xaml.Interactions.Core"
+    Background="#08090A"  
 	>
     <Page.Resources>
 
@@ -98,7 +99,7 @@
 
         
         <ListView x:Name="task_list" ItemClick="task_list_ItemClick" IsItemClickEnabled="True" Grid.Row="0" Grid.Column="1"  Background="Transparent"
-                  Padding="15" Margin="25,0,0,0" SelectionChanged="task_list_SelectionChanged" >
+                  Padding="15" Margin="25,0,0,0" SelectionChanged="task_list_SelectionChanged"  >
 
             <ListView.HeaderTemplate>
                 <DataTemplate  x:DataType="x:String">
@@ -120,8 +121,17 @@
 
                         <Button Name="Play_task" Background="Transparent"
                                 RelativePanel.AlignRightWithPanel="True" BorderThickness="0" 
-                                Click="Play_task_Click">
-                            <fa:FontAwesome Name="Play" Icon="Play" Foreground="Fuchsia"/>
+                                Click="Play_task_Click" >
+                            <fa:FontAwesome Name="Play" Icon="Play" Foreground="Fuchsia" >
+                       
+                            </fa:FontAwesome>
+                           <Interactivity:Interaction.Behaviors>
+                                <Core:EventTriggerBehavior EventName="Click">
+                                    <Core:ChangePropertyAction TargetObject="{Binding ElementName=Play}" PropertyName="Icon"  Value="Pause" />
+                                </Core:EventTriggerBehavior>
+
+                            </Interactivity:Interaction.Behaviors>
+
                         </Button>
                     </RelativePanel>
                    

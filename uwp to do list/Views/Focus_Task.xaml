@@ -1,0 +1,89 @@
+﻿<Page
+    x:Class="uwp_to_do_list.Views.Focus_Task"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:uwp_to_do_list.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*" ></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto "></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+             
+        </Grid.RowDefinitions>
+
+        <TextBlock  Text="NameTask" FontSize="20"
+                    HorizontalAlignment="Center" Grid.ColumnSpan="2" Margin="0,50,0,50" ></TextBlock>
+
+        <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" >
+            
+        <TextBlock Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" Grid.ColumnSpan="2" 
+                   Text="Select the apps that helps you to finish the task" FontSize="15 "></TextBlock>
+
+            <ListBox  Width="700" Height="150"  BorderThickness="1" ></ListBox>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                
+            <Button
+            Content="Add" Background="Green" 
+            Grid.Column="0" Grid.Row="1"
+            Width="100">
+
+            </Button>
+
+            <Button Grid.Column="1" Grid.Row="1"  HorizontalAlignment="Center" Background="Red" Content="Delete" 
+                Width="100"></Button>
+            </StackPanel>
+            
+        </StackPanel>
+
+
+        <StackPanel Grid.Column="0" Grid.Row="2" Margin="0,60,0,0" Grid.ColumnSpan="2" HorizontalAlignment="Center">
+            <TextBlock Text="Set timer"  FontSize="20" HorizontalAlignment="Center" Margin="0,0,0,10">
+            </TextBlock>
+
+            <StackPanel  Orientation="Horizontal">
+            
+             <TextBlock Text="Set Timer for  "  ></TextBlock>
+
+                <ComboBox Text="00" IsEditable="True" >
+
+                    <ComboBoxItem Content="1"></ComboBoxItem>
+                    <ComboBoxItem Content="2"></ComboBoxItem>
+                    <ComboBoxItem Content="3"></ComboBoxItem>
+                    <ComboBoxItem Content="4"></ComboBoxItem>
+
+                </ComboBox>
+
+                <TextBlock Text=" Hours " ></TextBlock>
+
+                <ComboBox IsEditable="True" Text="00"  >
+                <ComboBoxItem Content="5"></ComboBoxItem>
+                <ComboBoxItem Content="15"></ComboBoxItem>
+                <ComboBoxItem Content="30"></ComboBoxItem>
+                <ComboBoxItem Content="45"></ComboBoxItem>
+                <ComboBoxItem Content="60"></ComboBoxItem>
+            </ComboBox>
+
+                <TextBlock Text=" minutes  " ></TextBlock>
+
+            </StackPanel>
+
+         
+           
+        </StackPanel>
+
+        <Button Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" 
+                 Content="Start" Width="200" Background="Green" Height="50" ></Button>
+
+    </Grid>
+</Page>

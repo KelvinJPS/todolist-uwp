@@ -12,7 +12,7 @@ namespace uwp_to_do_list
 {
     public class TaskTodo : INotifyPropertyChanged
     {
-        private string _NameTask, _Priority, _NameList, _Description, _Done;
+        private string _NameTask, _Priority, _NameList, _Description, _Done, _Icon;
         private int _Id, _ParentTask;
 
         private DateTimeOffset _NextRep, _Date, _Reminder;
@@ -194,6 +194,8 @@ namespace uwp_to_do_list
 
             return PlannedTasks;
         }
+
+
     }
     }   
 
